@@ -97,6 +97,7 @@ public class SignupActivity extends AppCompatActivity {
 
         // TODO: Implement your own signup logic here.
 
+
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
@@ -107,6 +108,8 @@ public class SignupActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                 }, 3000);
+        Intent intent = new Intent(this, Main2Activity.class);
+        startActivity(intent);
     }
 
     public void onSignupSuccess() {

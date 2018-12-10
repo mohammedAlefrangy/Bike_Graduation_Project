@@ -15,4 +15,18 @@
     <string name="already_a_member">Already a member? Login</string>
     <string name="birthday">Birthday</string>
     <string name="failed">Login failed</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="map">Map</string>
+    <string name="rent_bike">Rent Bike</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="logo">Logo</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bikeNumber">Bike Number</string>
+    <string name="qrScan">Qr Scan</string>
+    <string name="request">Request</string>
 </resources>

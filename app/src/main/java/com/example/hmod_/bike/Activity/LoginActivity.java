@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
-                this.finish();
+
             }
         }
     }
@@ -97,11 +97,14 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                 }, 3000);
+
+        Intent intent = new Intent(this, Main2Activity.class);
+        startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
-        // disable going back to the MainActivity
+        // disable going back to the SplachActivity
         moveTaskToBack(true);
     }
 
