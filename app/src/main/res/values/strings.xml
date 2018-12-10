@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Bike</string>
+    <string name="login">Login</string>
+    <string name="yourEmail">Enter Your Email</string>
+    <string name="password">Password</string>
+    <string name="attempts">Attempts Left:</string>
+    <string name="number">New Text</string>
+    <string name="cancel">Cancel</string>
+    <string name="woring">Wrong Credentials</string>
+    <string name="redirecting">Redirecting...</string>
+    <string name="email">Email</string>
+    <string name="createAcount">No account yet? Create one</string>
+    <string name="name">Full Name</string>
+    <string name="singup">Create Account</string>
+    <string name="already_a_member">Already a member? Login</string>
+    <string name="birthday">Birthday</string>
+    <string name="failed">Login failed</string>
+</resources>
