@@ -1,11 +1,12 @@
 package com.example.hmod_.bike;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.example.hmod_.bike.Activity.LoginActivity;
+import com.example.hmod_.bike.Activity.Main2Activity;
 
 public class SplachActivity extends AppCompatActivity {
     private int SPLASH_TIME = 1500;
@@ -21,7 +22,7 @@ public class SplachActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // This method will be executed once the timer is over
-                Intent i = new Intent(SplachActivity.this, LoginActivity.class);
+                Intent i = new Intent(SplachActivity.this, Main2Activity.class);
                 startActivity(i);
                 finish();
             }
