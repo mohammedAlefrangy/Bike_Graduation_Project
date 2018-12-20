@@ -90,6 +90,6 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
 
             return ;
         }
-        mMap.setMyLocationEnabled(true);
+//        mMap.setMyLocationEnabled(true);
     }
 }
