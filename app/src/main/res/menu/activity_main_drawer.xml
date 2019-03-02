@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/find_bike"
+            android:icon="@drawable/ic_find_replace"
+            android:title="Find Bike" />
+        <item
+            android:id="@+id/connect_to_bike"
+            android:icon="@drawable/ic_car_connected"
+            android:title="Connect To Bike" />
+        <item
+            android:id="@+id/my_rents"
+            android:icon="@drawable/ic_information_variant"
+            android:title="My Rents" />
+        <item
+            android:id="@+id/my_account"
+            android:icon="@drawable/ic_account"
+            android:title="My Account" />
+    </group>
+
+    <item android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/where_to_buy_vouchers"
+                android:icon="@drawable/ic_map_marker_check"
+                android:title="Where To Buy Vouchers" />
+            <item
+                android:id="@+id/rate_us"
+                android:icon="@drawable/ic_information_outline"
+                android:title="Rate Us" />
+        </menu>
+    </item>
+
+</menu>

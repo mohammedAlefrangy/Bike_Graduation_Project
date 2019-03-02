@@ -8,14 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hmod_.bike.R;
-
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,8 +30,6 @@ public class SignupActivity extends AppCompatActivity {
     EditText passwordText;
     @BindView(R.id.reinput_password)
     EditText re_password;
-    @BindView(R.id.input_birthday)
-    EditText birthdayText;
     @BindView(R.id.btn_signup)
     Button signupButton;
     @BindView(R.id.link_login)
@@ -46,14 +41,8 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
+        getSupportActionBar().setTitle("SIGNUP to CityBikes");
 
-
-        birthdayText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCalender();
-            }
-        });
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +97,7 @@ public class SignupActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                 }, 3000);
-        Intent intent = new Intent(this, Main2Activity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
@@ -130,7 +119,6 @@ public class SignupActivity extends AppCompatActivity {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
         String rePassword = re_password.getText().toString();
-        String birthday = birthdayText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
             nameText.setError("at least 3 characters");
@@ -160,33 +148,25 @@ public class SignupActivity extends AppCompatActivity {
             passwordText.setError(null);
         }
 
-        if (birthday.isEmpty()) {
-            birthdayText.setError("Date of birth must be added");
-            valid = false;
-        } else {
-            birthdayText.setError(null);
-        }
-
         return valid;
     }
 
-    private void showCalender() {
-
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(SignupActivity.this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        birthdayText.setText(day + "/" + month + "/" + year);
-                    }
-                }, year, month, dayOfMonth);
-        datePickerDialog.show();
-
-    }
-
+//    private void showCalender() {
+//
+//        Calendar calendar = Calendar.getInstance();
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH);
+//        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+//
+//        DatePickerDialog datePickerDialog = new DatePickerDialog(SignupActivity.this,
+//                new DatePickerDialog.OnDateSetListener() {
+//                    @Override
+//                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+//                        birthdayText.setText(day + "/" + month + "/" + year);
+//                    }
+//                }, year, month, dayOfMonth);
+//        datePickerDialog.show();
+//
+//    }
 
 }

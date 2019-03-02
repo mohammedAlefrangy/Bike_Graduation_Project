@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Bike</string>
-    <string name="login">Login</string>
+    <string name="login">LOG IN</string>
     <string name="yourEmail">Enter Your Email</string>
     <string name="password">Password</string>
     <string name="attempts">Attempts Left:</string>
@@ -8,7 +8,7 @@
     <string name="cancel">Cancel</string>
     <string name="woring">Wrong Credentials</string>
     <string name="redirecting">Redirecting...</string>
-    <string name="email">Email</string>
+    <string name="email">Username or Email</string>
     <string name="createAcount">No account yet? Create one</string>
     <string name="name">Full Name</string>
     <string name="singup">Create Account</string>
@@ -29,4 +29,17 @@
     <string name="bikeNumber">Bike Number</string>
     <string name="qrScan">Qr Scan</string>
     <string name="request">Request</string>
+    <string name="facebook">LOGIN WITH FACEBOOK</string>
+    <string name="twitter">LOGIN WITH TWITTER</string>
+    <string name="google">LOGIN WITH GOOGLE</string>
+    <string name="title_activity_map">Map</string>
+    <string name="userName">Mohammed Alefrangy</string>
+    <string name="credits">Credits: 11 NIS</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 </resources>

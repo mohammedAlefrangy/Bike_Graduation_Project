@@ -5,5 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
     <color name="signupColor">#066e8a</color>
-    <color name="blue">#42a5f5</color>
+    <color name="bluet">#42a5f5</color>
+    <color name="blue">#2E00B5</color>
+    <color name="red">#FF1C00</color>
+    <color name="black">#000000</color>
 </resources>

@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         ButterKnife.bind(this);
+        getSupportActionBar().setTitle("Login to CityBikes");
 
         loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -98,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }, 3000);
 
-        Intent intent = new Intent(this, Main2Activity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

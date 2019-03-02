@@ -1,10 +1,16 @@
-package com.example.hmod_.bike.Fragment;
+package com.example.hmod_.bike.Activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.hmod_.bike.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
