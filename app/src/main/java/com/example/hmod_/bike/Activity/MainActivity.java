@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragment = null;
         Class fragmentClass = null;
-        fragmentClass = MyRentActivity.class;
+        fragmentClass = MapsActivity.class;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
