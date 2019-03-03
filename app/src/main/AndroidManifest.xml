@@ -62,7 +62,8 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.ConnectBike" />
-        <activity android:name=".Activity.MyRentActivity"></activity>
+        <activity android:name=".Activity.MyRentActivity" />
+        <activity android:name=".Activity.MyAccount"></activity>
     </application>
 
 </manifest>

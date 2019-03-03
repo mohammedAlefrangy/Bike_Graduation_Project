@@ -1,9 +1,15 @@
 package com.example.hmod_.bike.Activity;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -12,11 +18,12 @@ import com.example.hmod_.bike.Adapter.AdapterForListItem;
 import com.example.hmod_.bike.R;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MyRentActivity extends AppCompatActivity implements AdapterForListItem.OnItemClickListener {
+public class MyRentActivity extends Fragment implements AdapterForListItem.OnItemClickListener {
 
     GridLayoutManager layoutManager;
     private AdapterForListItem mAdapter;
@@ -24,19 +31,26 @@ public class MyRentActivity extends AppCompatActivity implements AdapterForListI
 
     private ArrayList<String> time = new ArrayList<>();
     private ArrayList<String> date_and_price = new ArrayList<>();
+    Intent intentThatStartedThisActivity ;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_rent);
-        ButterKnife.bind(this);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_my_rent, container, false);
+        intentThatStartedThisActivity = Objects.requireNonNull(getActivity()).getIntent();
+        ButterKnife.bind(this, rootView);
+
+//        recyclerView = rootView.findViewById(R.id.recyclerView);
+//        ButterKnife.bind(getActivity());
         onItemClickListener = this;
+
 
         initText();
 
+        return rootView;
     }
 
     private void initText() {
@@ -58,14 +72,15 @@ public class MyRentActivity extends AppCompatActivity implements AdapterForListI
 
     private void initRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        mAdapter = new AdapterForListItem(time, date_and_price, this, onItemClickListener);
+        mAdapter = new AdapterForListItem(time, date_and_price, getContext(), onItemClickListener);
         recyclerView.setAdapter(mAdapter);
-        layoutManager = new GridLayoutManager(this, 1, GridLayoutManager.VERTICAL, false);
+        layoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
-        Toast.makeText(this, " Thank You :) ", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), " Thank You :) ", Toast.LENGTH_SHORT).show();
     }
+
 }

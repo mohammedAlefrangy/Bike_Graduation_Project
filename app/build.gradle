@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.hmod_.bike"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -39,6 +39,12 @@ dependencies {
 
 
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+
+    // google mobile vision
+    implementation 'com.google.android.gms:play-services-vision:11.0.2'
+
+    // barcode reader
+    implementation 'info.androidhive:barcode-reader:1.1.5'
 
 }
 
