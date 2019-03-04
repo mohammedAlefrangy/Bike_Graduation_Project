@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "462637942807",
-    "firebase_url": "https://bike-73975.firebaseio.com",
-    "project_id": "bike-73975",
-    "storage_bucket": "bike-73975.appspot.com"
+    "project_number": "101528730348",
+    "firebase_url": "https://smart-bikes-f99e4.firebaseio.com",
+    "project_id": "smart-bikes-f99e4",
+    "storage_bucket": "smart-bikes-f99e4.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:462637942807:android:1385b3cd46b049e0",
+        "mobilesdk_app_id": "1:101528730348:android:1385b3cd46b049e0",
         "android_client_info": {
           "package_name": "com.example.hmod_.bike"
         }
       },
       "oauth_client": [
         {
-          "client_id": "462637942807-k003f8p9a7phg69nqvr9j7vag19h12u4.apps.googleusercontent.com",
+          "client_id": "101528730348-p9gbcef3q5hvmj7d7gv1d4g9g0g88im6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.hmod_.bike",
-            "certificate_hash": "07ecbbc684fc10b3230158d96c2f751ccf784414"
+            "certificate_hash": "b10790c980e0018528d4e851792114fc86ca9a47"
           }
         },
         {
-          "client_id": "462637942807-4qjtd6dcdbfst6gvq1vuo2c82p8a2aso.apps.googleusercontent.com",
+          "client_id": "101528730348-1vqnmh109in52lkdvj6mlbr4b40lnjam.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyChdl_OWR3j2RDIZX4DEofjiS2fP2DBLZ4"
+          "current_key": "AIzaSyCqCjUzEnAWhOCKt9CJ_w38x4-WTG1dr8g"
         }
       ],
       "services": {
@@ -40,7 +40,51 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "462637942807-4qjtd6dcdbfst6gvq1vuo2c82p8a2aso.apps.googleusercontent.com",
+              "client_id": "101528730348-1vqnmh109in52lkdvj6mlbr4b40lnjam.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101528730348:android:d3885e5af2221c49",
+        "android_client_info": {
+          "package_name": "com.smartgaza.smartbikes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "101528730348-96skbfq0sc1c2luq1o8cbi5qdr218ak4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.smartgaza.smartbikes",
+            "certificate_hash": "b10790c980e0018528d4e851792114fc86ca9a47"
+          }
+        },
+        {
+          "client_id": "101528730348-1vqnmh109in52lkdvj6mlbr4b40lnjam.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqCjUzEnAWhOCKt9CJ_w38x4-WTG1dr8g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "101528730348-1vqnmh109in52lkdvj6mlbr4b40lnjam.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
