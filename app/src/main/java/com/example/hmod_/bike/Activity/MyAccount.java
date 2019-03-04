@@ -1,9 +1,8 @@
 package com.example.hmod_.bike.Activity;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.SparseArray;
@@ -16,13 +15,12 @@ import com.example.hmod_.bike.R;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import java.util.List;
-import java.util.Objects;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import info.androidhive.barcode.BarcodeReader;
 
-public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderListener{
-    Intent intentThatStartedThisActivity ;
+public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderListener {
+
+    Intent intentThatStartedThisActivity;
     private static final String TAG = "MyAccount";
 
 
@@ -33,11 +31,18 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+        }
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_my_account, container, false);
-        intentThatStartedThisActivity = Objects.requireNonNull(getActivity()).getIntent();
-        ButterKnife.bind(this, rootView);
+//        intentThatStartedThisActivity = Objects.requireNonNull(getActivity()).getIntent();
+//        ButterKnife.bind(this, rootView);
 
         barcodeReader = (BarcodeReader) getChildFragmentManager().findFragmentById(R.id.barcode_fragment);
         barcodeReader.setListener(this);
@@ -45,6 +50,7 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
         return rootView;
 
     }
+
 
     @Override
     public void onScanned(final Barcode barcode) {
@@ -54,7 +60,8 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getActivity(), "Barcode: " + barcode.displayValue, Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(getActivity(), "Barcode: " + barcode.displayValue, Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

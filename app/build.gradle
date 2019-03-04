@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
 
 android {
     compileSdkVersion 27
@@ -9,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -41,11 +44,10 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
     // google mobile vision
-    implementation 'com.google.android.gms:play-services-vision:11.0.2'
+    implementation 'com.google.android.gms:play-services-vision:17.0.2'
 
     // barcode reader
     implementation 'info.androidhive:barcode-reader:1.1.5'
 
 }
 
-apply plugin: 'com.google.gms.google-services'

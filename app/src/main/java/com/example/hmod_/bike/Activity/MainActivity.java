@@ -1,6 +1,5 @@
 package com.example.hmod_.bike.Activity;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -15,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.example.hmod_.bike.R;
 
@@ -24,6 +22,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
 
     @BindView(R.id.location)
     ImageButton location;
@@ -59,7 +58,16 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+
+//        // Register for broadcasts when a device is discovered.
+//        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+//        registerReceiver(mReceiver, filter);
+//        mBluetoothAdapter.startDiscovery();
+
+
     }
+
 
     @Override
     public void onBackPressed() {
@@ -112,7 +120,6 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = ConnectBike.class;
 
 
-
 //            Intent intent = new Intent(MainActivity.this, ConnectBike.class);
 //            startActivity(intent);
 
@@ -145,4 +152,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
