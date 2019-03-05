@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -60,7 +61,7 @@ public class ConnectBike extends Fragment {
     Intent intentThatStartedThisActivity ;
 
     @BindView(R.id.rent_now)
-    ImageView rent_now;
+    Button rent_now;
     @BindView(R.id.spinner)
     Spinner spinner;
 

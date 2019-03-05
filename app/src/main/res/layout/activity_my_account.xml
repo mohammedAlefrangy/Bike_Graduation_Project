@@ -39,8 +39,6 @@
             android:text="Mohammed"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold|italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/circleImageView"
             app:layout_constraintTop_toTopOf="@+id/circleImageView" />
@@ -57,8 +55,7 @@
             android:text="@string/credits"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold|italic"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/userName"
             app:layout_constraintStart_toStartOf="@+id/userName"
             app:layout_constraintTop_toBottomOf="@+id/userName" />
@@ -67,16 +64,16 @@
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/circleImageView"
-            app:layout_constraintVertical_bias="0.053">
+            app:layout_constraintVertical_bias="1.0">
 
 
             <TextView
@@ -89,11 +86,11 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical|start"
                 android:padding="4dp"
-                android:text="Add A Vouncher"
+                android:text="Add a vouncher"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:textStyle="bold|italic"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -107,7 +104,7 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical|start"
                 android:padding="4dp"
-                android:text="Enter the cod or scan barCode:"
+                android:text="@string/entercode"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -115,21 +112,38 @@
                 app:layout_constraintStart_toStartOf="@+id/add_vouncher"
                 app:layout_constraintTop_toBottomOf="@+id/add_vouncher" />
 
+            <FrameLayout
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/entr"
+                android:id="@+id/barcode_frame">
+                <fragment
+                    android:id="@+id/barcode_fragment"
+                    android:name="info.androidhive.barcode.BarcodeReader"
+                    android:layout_width="500dp"
+                    android:layout_height="318dp"
+                    android:layout_gravity="center_vertical"
+                    app:auto_focus="true"
+                    app:use_flash="false" />
+            </FrameLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textInputLayout7"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/add"
-                app:layout_constraintStart_toStartOf="@+id/entr"
-                app:layout_constraintTop_toBottomOf="@+id/entr">
+                android:layout_width="240dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barcode_frame">
 
                 <EditText
-                    android:id="@+id/input_name"
+                    android:id="@+id/codeET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="code"
@@ -142,34 +156,22 @@
                 android:id="@+id/add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:drawableLeft="@drawable/ic_plus_circle_outline"
                 android:drawablePadding="8dp"
                 android:padding="16dp"
                 android:text="ADD"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textInputLayout7"
                 app:layout_constraintTop_toTopOf="@+id/textInputLayout7" />
+
+
 
 
         </android.support.constraint.ConstraintLayout>
 
-        <fragment
-            android:id="@+id/barcode_fragment"
-            android:name="info.androidhive.barcode.BarcodeReader"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:auto_focus="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
-            app:use_flash="false" />
 
     </android.support.constraint.ConstraintLayout>
 
