@@ -1,22 +1,17 @@
 package com.example.hmod_.bike.Activity;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -91,9 +86,9 @@ public class MainActivity extends AppCompatActivity
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (currentUser == null) {
-            createSignInIntent ();
+            createSignInIntent();
         } else {
-            updateUser ();
+            updateUser();
         }
 
 
@@ -105,6 +100,7 @@ public class MainActivity extends AppCompatActivity
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
                 new AuthUI.IdpConfig.FacebookBuilder().build(),
                 new AuthUI.IdpConfig.TwitterBuilder().build());
+
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
@@ -115,7 +111,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void updateUser (){
+    private void updateUser() {
         currentAuthUser = mAuth.getCurrentUser();
         db.collection("users").document(currentAuthUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -126,20 +122,21 @@ public class MainActivity extends AppCompatActivity
                         currentUser = document.toObject(User.class);
 
                     } else {
-                        currentUser = new User (currentAuthUser);
+                        currentUser = new User(currentAuthUser);
                         db.collection("users").document(currentAuthUser.getUid()).set(currentUser);
                     }
-                    updateUI ();
+                    updateUI();
                 }
             }
         });
     }
 
-    private void updateUI (){ ;
+    private void updateUI() {
+        ;
         TextView usernameTV = navigationView.getHeaderView(0).findViewById(R.id.userName);
         usernameTV.setText(currentUser.getName());
         TextView creditsTV = navigationView.getHeaderView(0).findViewById(R.id.credits);
-        creditsTV.setText("Credits: "+ currentUser.getCredits() +" NIS");
+        creditsTV.setText("Credits: " + currentUser.getCredits() + " NIS");
     }
 
 
@@ -151,28 +148,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.sign_out) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -190,15 +165,14 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = ConnectBike.class;
         } else if (id == R.id.my_rents) {
             fragmentClass = MyRentActivity.class;
-
         } else if (id == R.id.my_account) {
             fragmentClass = MyAccount.class;
-
-
         } else if (id == R.id.where_to_buy_vouchers) {
 
         } else if (id == R.id.rate_us) {
 
+        } else if (id == R.id.log_out) {
+            fragmentClass = MyAccount.class;
         }
 
         try {
@@ -214,4 +188,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

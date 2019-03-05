@@ -32,6 +32,11 @@
                 android:id="@+id/rate_us"
                 android:icon="@drawable/ic_information_outline"
                 android:title="Rate Us" />
+
+            <item
+                android:id="@+id/log_out"
+                android:icon="@drawable/ic_logout"
+                android:title="Log Out" />
         </menu>
     </item>
 

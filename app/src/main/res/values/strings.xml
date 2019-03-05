@@ -46,4 +46,5 @@
     <string name="twitter_consumer_key" translatable="false">XbuNeoJUiIytFoq9T6Lug</string>
     <string name="twitter_consumer_secret" translatable="false">0NTggyofUI30OJtP8bjpFDr54SLTg59emok8skADvB8</string>
     <string name="entercode">Enter the voucher code or scan it</string>
+    <string name="refresh">Refresh</string>
 </resources>
