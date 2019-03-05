@@ -9,4 +9,9 @@
     <color name="blue">#2E00B5</color>
     <color name="red">#FF1C00</color>
     <color name="black">#000000</color>
+
+    <color name="bgSplash">#750404</color>
+    <color name="bgText">#A80505</color>
+
+
 </resources>
