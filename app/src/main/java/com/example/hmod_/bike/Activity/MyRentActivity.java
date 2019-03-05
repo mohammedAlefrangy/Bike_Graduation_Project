@@ -65,18 +65,6 @@ public class MyRentActivity extends Fragment implements AdapterForListItem.OnIte
     }
 
     private void initText() {
-        // yyyy/MM/dd hh:mma
-        /*time.add(" 1 Hour and 32 Minutes ");
-        date_and_price.add(" 2019/01/04 01:08pm -- 2 NIS ");
-
-        time.add(" 15 Minutes ");
-        date_and_price.add(" 2019/01/11 10:17pm -- 1 NIS ");
-
-        time.add(" 30 Minutes ");
-        date_and_price.add(" 2019/01/7 11:32pm -- 4 NIS ");
-
-        time.add(" 2 Hour and 15 Minutes ");
-        date_and_price.add(" 2019/01/04 12:08pm -- 3 NIS ");*/
         MainActivity.db.collection("rents").whereEqualTo("uid", MainActivity.currentAuthUser.getUid()).orderBy("startTime", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
