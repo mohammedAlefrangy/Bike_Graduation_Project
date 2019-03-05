@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         currentUser = document.toObject(User.class);
+
                     } else {
                         currentUser = new User (currentAuthUser);
                         db.collection("users").document(currentAuthUser.getUid()).set(currentUser);
