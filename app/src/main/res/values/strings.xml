@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Bike</string>
     <string name="login">LOG IN</string>
     <string name="yourEmail">Enter Your Email</string>
     <string name="password">Password</string>
@@ -42,4 +41,8 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="facebook_application_id" translatable="false">972579082935927</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb972579082935927</string>
+    <string name="twitter_consumer_key" translatable="false">XbuNeoJUiIytFoq9T6Lug</string>
+    <string name="twitter_consumer_secret" translatable="false">0NTggyofUI30OJtP8bjpFDr54SLTg59emok8skADvB8</string>
 </resources>

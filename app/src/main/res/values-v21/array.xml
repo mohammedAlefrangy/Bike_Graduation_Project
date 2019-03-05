@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="spinner_array">
-        <item> 3514 </item>
-        <item> 4182 </item>
-        <item> 5220 </item>
-        <item> 1451 </item>
     </string-array>
 
 </resources>

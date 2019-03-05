@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.hmod_.bike.R;
+import com.example.hmod_.bike.Rent;
 
 import java.util.ArrayList;
 
 public class AdapterForListItem extends RecyclerView.Adapter<AdapterForListItem.MyViewHolder> {
-    private ArrayList<String> time;
-    private ArrayList<String> date_and_price;
+    private ArrayList<Rent> rents;
     private Context context;
     private final OnItemClickListener onItemClickListener;
 
@@ -23,9 +23,8 @@ public class AdapterForListItem extends RecyclerView.Adapter<AdapterForListItem.
     }
 
 
-    public AdapterForListItem(ArrayList<String> time, ArrayList<String> date_and_price, Context context, OnItemClickListener onItemClickListener) {
-        this.time = time;
-        this.date_and_price = date_and_price;
+    public AdapterForListItem(ArrayList<Rent> rents, Context context, OnItemClickListener onItemClickListener) {
+        this.rents = rents;
         this.context = context;
         this.onItemClickListener = onItemClickListener;
 
@@ -40,14 +39,14 @@ public class AdapterForListItem extends RecyclerView.Adapter<AdapterForListItem.
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 //        Picasso.with(context).load(quiz_image.get(position)).into(holder.mImageView);
-        holder.mtime.setText(time.get(position));
-        holder.mdate_and_price.setText(date_and_price.get(position));
+        holder.mtime.setText(rents.get(position).getDuration());
+        holder.mdate_and_price.setText(rents.get(position).getStartTimeAndCost());
 
     }
 
     @Override
     public int getItemCount() {
-        return time.size();
+        return rents.size();
     }
 
     // Provide a reference to the views for each data item

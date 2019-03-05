@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
@@ -21,17 +22,21 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
 
 public class MapsActivity extends SupportMapFragment implements OnMapReadyCallback {
-
-    private final LatLng KIEL = new LatLng(31.5078947, 34.4561705);
-    private final LatLng HAMBURG = new LatLng(31.508315, 34.4535093);
 
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private GoogleMap mMap;
-    private Marker marker;
+    private HashMap<String, Marker> markers = new HashMap<>();
 
     public MapsActivity() {
     }
@@ -62,40 +67,39 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
     }
 
     private void setUpMap() {
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        MainActivity.db.collection("bikes").whereEqualTo("available", true).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
 
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    GeoPoint geoPoint = dc.getDocument().getGeoPoint("location");
+                    if (dc.getType() == DocumentChange.Type.ADDED) {
+                        Marker docmarker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude()))
+                        );
+                        markers.put(dc.getDocument().getId(), docmarker);
+                    } else if (dc.getType() == DocumentChange.Type.REMOVED) {
+                        markers.get(dc.getDocument().getId()).remove();
+                        markers.remove(dc.getDocument().getId());
+                    } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                        markers.get(dc.getDocument().getId()).setPosition(new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude()));
+                    }
+                }
 
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            mMap.getUiSettings().setMapToolbarEnabled(false);
-
-
-            mMap.addMarker(new MarkerOptions().position(HAMBURG)
-                    .title("Hamburg"));
-            mMap.addMarker(new MarkerOptions()
-                    .position(KIEL)
-                    .title("Kiel")
-                    .snippet("Kiel is cool")
-                   );
-
-
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(HAMBURG, 15.0f));
-
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+            }
+        });
 
 
-            return ;
-        }
-//        mMap.setMyLocationEnabled(true);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31.5210764,34.44328), 15.0f));
+
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+        mMap.setMyLocationEnabled(true);
     }
 }
