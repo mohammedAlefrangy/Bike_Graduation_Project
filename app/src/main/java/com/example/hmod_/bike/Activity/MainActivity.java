@@ -1,12 +1,16 @@
 package com.example.hmod_.bike.Activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.functions.FirebaseFunctions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,13 +47,17 @@ public class MainActivity extends AppCompatActivity
 
     private static final int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
-    private FirebaseUser currentAuthUser;
+    public static FirebaseUser currentAuthUser;
+
     public static User currentUser;
+    public static FirebaseFunctions ff = FirebaseFunctions.getInstance();
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mainActivity = this;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -77,7 +86,7 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
+        //TODO: Move the firebase auth to splach activity
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
@@ -86,8 +95,9 @@ public class MainActivity extends AppCompatActivity
         } else {
             updateUser ();
         }
-    }
 
+
+    }
 
     public void createSignInIntent() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(

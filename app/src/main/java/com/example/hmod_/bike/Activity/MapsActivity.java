@@ -67,57 +67,39 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
     }
 
     private void setUpMap() {
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            mMap.getUiSettings().setMapToolbarEnabled(false);
-
-            MainActivity.db.collection("bikes").whereEqualTo("available", true).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@Nullable QuerySnapshot snapshots,
-                                    @Nullable FirebaseFirestoreException e) {
-                    if (e != null) {
-                        return;
-                    }
-
-                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                        GeoPoint geoPoint = dc.getDocument().getGeoPoint("location");
-                        if (dc.getType() == DocumentChange.Type.ADDED) {
-                            Marker docmarker = mMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude()))
-                            );
-                            markers.put(dc.getDocument().getId(), docmarker);
-                        } else if (dc.getType() == DocumentChange.Type.REMOVED) {
-                            markers.get(dc.getDocument().getId()).remove();
-                            markers.remove(dc.getDocument().getId());
-                        } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
-                            markers.get(dc.getDocument().getId()).setPosition(new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude()));
-                        }
-                    }
-
+        MainActivity.db.collection("bikes").whereEqualTo("available", true).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
                 }
-            });
+
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    GeoPoint geoPoint = dc.getDocument().getGeoPoint("location");
+                    if (dc.getType() == DocumentChange.Type.ADDED) {
+                        Marker docmarker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude()))
+                        );
+                        markers.put(dc.getDocument().getId(), docmarker);
+                    } else if (dc.getType() == DocumentChange.Type.REMOVED) {
+                        markers.get(dc.getDocument().getId()).remove();
+                        markers.remove(dc.getDocument().getId());
+                    } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                        markers.get(dc.getDocument().getId()).setPosition(new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude()));
+                    }
+                }
+
+            }
+        });
 
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31.5210764,34.44328), 15.0f));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31.5210764,34.44328), 15.0f));
 
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
-
-
-            return ;
-        }
-//        mMap.setMyLocationEnabled(true);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+        mMap.setMyLocationEnabled(true);
     }
 }
