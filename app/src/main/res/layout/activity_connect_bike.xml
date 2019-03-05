@@ -6,24 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".Activity.ConnectBike">
 
-    <ImageView
+    <Button
         android:id="@+id/rent_now"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="56dp"
-        android:src="@drawable/ic_bike"
+        android:drawableTop="@mipmap/ic_bike_rent_new"
+        android:drawablePadding="8dp"
+        android:text="@string/rent_bike"
+        android:src="@mipmap/ic_bike_rent_new"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!--android:background="?android:attr/selectableItemBackground"-->
+
 
     <TextView
         android:id="@+id/bike_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="32dp"
         android:text="@string/bikeNumber"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
