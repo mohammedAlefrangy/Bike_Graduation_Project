@@ -3,67 +3,48 @@ package com.example.hmod_.bike.Activity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.IntentFilter;
-import android.support.v4.app.Fragment;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.hmod_.bike.R;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
-import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.api.Experimental;
 import com.google.firebase.functions.HttpsCallableResult;
 import com.harrysoft.androidbluetoothserial.BluetoothManager;
 import com.harrysoft.androidbluetoothserial.BluetoothSerialDevice;
 import com.harrysoft.androidbluetoothserial.SimpleBluetoothDeviceInterface;
 
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 public class ConnectBike extends Fragment {
 
-    Intent intentThatStartedThisActivity ;
+//    Intent intentThatStartedThisActivity;
 
     @BindView(R.id.rent_now)
     Button rent_now;
     @BindView(R.id.spinner)
     Spinner spinner;
+    PulsatorLayout pulsator;
 
     private HashMap<String, BluetoothDevice> blDevices = new HashMap<>();
     private List<String> blDevicesName = new ArrayList<String>();
@@ -79,7 +60,7 @@ public class ConnectBike extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.activity_connect_bike, container, false);
-        intentThatStartedThisActivity = Objects.requireNonNull(getActivity()).getIntent();
+//        intentThatStartedThisActivity = Objects.requireNonNull(getActivity()).getIntent();
         ButterKnife.bind(this, rootView);
 //        getSupportActionBar().setTitle("Connect to a bike");
 
@@ -89,6 +70,10 @@ public class ConnectBike extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+        //PulsatorLayout animation
+        pulsator = (PulsatorLayout) rootView.findViewById(R.id.pulsator);
+        pulsator.start();
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!mBluetoothAdapter.isEnabled()) {
@@ -110,17 +95,16 @@ public class ConnectBike extends Fragment {
             Toast.makeText(context, "Bluetooth not available.", Toast.LENGTH_LONG).show();
 
         }*/
-        rent_now.setOnClickListener(new View.OnClickListener()
-        {
+        rent_now.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                connectButton ();
+            public void onClick(View v) {
+                connectButton();
+                pulsator.stop();
             }
         });
 
 
-        return rootView ;
+        return rootView;
 
     }
 
@@ -133,8 +117,8 @@ public class ConnectBike extends Fragment {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 Log.i(TAG, "Device found: " + device.getName() + "; MAC " + device.getAddress());
                 if (device.getName().startsWith("Bike-")) {
-                    if (blDevices.get(device.getName()) == null){
-                        blDevices.put (device.getName(), device);
+                    if (blDevices.get(device.getName()) == null) {
+                        blDevices.put(device.getName(), device);
                         blDevicesName.add(device.getName().substring(5));
                         adapter.notifyDataSetChanged();
                     }
@@ -143,15 +127,16 @@ public class ConnectBike extends Fragment {
         }
     };
 
-    public void connectButton () {
+    public void connectButton() {
         bikeNumber = (String) spinner.getSelectedItem();
-        BluetoothDevice blDevice = blDevices.get("Bike-"+bikeNumber);
-        Log.d(TAG, "Connect to :"+blDevice.getName());
+        BluetoothDevice blDevice = blDevices.get("Bike-" + bikeNumber);
+        Log.d(TAG, "Connect to :" + blDevice.getName());
         bluetoothManager.openSerialDevice(blDevice.getAddress())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onConnected, this::onError);
     }
+
     private void onConnected(BluetoothSerialDevice connectedDevice) {
         deviceInterface = connectedDevice.toSimpleDeviceInterface();
         if (bikeNumber.isEmpty()) return;
@@ -164,12 +149,14 @@ public class ConnectBike extends Fragment {
                     Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
                     try {
                         deviceInterface.sendMessage((String) dataObj.get("key"));
-                    } catch (Exception ex) {}
+                    } catch (Exception ex) {
+                    }
                 }
             }
         });
 
     }
+
     private void onError(Throwable error) {
         // Handle the error
     }

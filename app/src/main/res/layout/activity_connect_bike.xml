@@ -49,5 +49,22 @@
         app:layout_constraintStart_toStartOf="@+id/bike_number"
         app:layout_constraintTop_toBottomOf="@+id/bike_number" />
 
+    <pl.bclogic.pulsator4droid.library.PulsatorLayout
+        android:id="@+id/pulsator"
+        android:layout_width="191dp"
+        android:layout_height="193dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:pulse_color="@color/bluet"
+        app:pulse_count="5"
+        app:pulse_duration="7000"
+        app:pulse_interpolator="Accelerate"
+        app:pulse_repeat="0"
+        app:pulse_startFromScratch="false" />
 
 </android.support.constraint.ConstraintLayout>
