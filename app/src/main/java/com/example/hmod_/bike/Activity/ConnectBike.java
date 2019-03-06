@@ -7,9 +7,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -57,6 +61,7 @@ public class ConnectBike extends Fragment {
     BluetoothManager bluetoothManager = BluetoothManager.getInstance();
     private SimpleBluetoothDeviceInterface deviceInterface;
     private String bikeNumber = "";
+    private Menu mMenu;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -176,6 +181,7 @@ public class ConnectBike extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
+        this.mMenu = menu;
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -188,6 +194,14 @@ public class ConnectBike extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.refresh) {
+            Log.d(TAG, "onOptionsItemSelected: " + id);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                AnimatedVectorDrawableCompat.create(getContext(), R.drawable.ic_sync).start();
+
+            } else {
+                mMenu.getItem(0).setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_sync));
+            }
+
             return true;
         }
 
