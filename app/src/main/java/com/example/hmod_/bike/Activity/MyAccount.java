@@ -10,13 +10,23 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.QuickContactBadge;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hmod_.bike.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.google.firebase.functions.HttpsCallableResult;
+import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +41,14 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
     private BarcodeReader barcodeReader;
     @BindView(R.id.codeET)
     EditText codeET;
+    @BindView(R.id.add)
+    Button addBtn;
+    @BindView(R.id.credits)
+    TextView creditsTV;
+    @BindView(R.id.userName)
+    TextView userNameTV;
+    @BindView(R.id.circleImageView)
+    ImageView circleIV;
 
     public MyAccount() {
         // Required empty public constructor
@@ -53,7 +71,32 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
         barcodeReader = (BarcodeReader) getChildFragmentManager().findFragmentById(R.id.barcode_fragment);
         barcodeReader.setListener(this);
 
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("voucher", codeET.getText().toString());
+                MainActivity.ff.getHttpsCallable("updateCredits").call(data).addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                    @Override
+                    public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                        if (httpsCallableResult.getData() instanceof Map) {
+                            Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
+                            if ((Boolean) dataObj.get("success")){
+                                MainActivity.mainActivity.updateUser();
+                                updateUI();
+                            }
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
 
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        updateUI();
         return rootView;
 
     }
@@ -92,4 +135,13 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
     public void onCameraPermissionDenied() {
         Toast.makeText(getActivity(), "Camera permission denied!", Toast.LENGTH_LONG).show();
     }
+
+    void updateUI (){
+        userNameTV.setText(MainActivity.currentUser.getName());
+        creditsTV.setText(String.format("Credits: %.2f NIS",MainActivity.currentUser.getCredits()));
+        if(!MainActivity.currentUser.getPhoto().isEmpty())
+            Picasso.get().load(MainActivity.currentUser.getPhoto()).into(circleIV);
+
+    }
+
 }

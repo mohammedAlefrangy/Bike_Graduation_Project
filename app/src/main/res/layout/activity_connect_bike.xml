@@ -10,15 +10,13 @@
         android:id="@+id/rent_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="56dp"
-        android:drawableTop="@mipmap/ic_bike_rent_new"
-        android:drawablePadding="8dp"
-        android:text="@string/rent_bike"
-        android:src="@mipmap/ic_bike_rent_new"
+        android:layout_marginEnd="8dp"
         android:background="?android:attr/selectableItemBackground"
+        android:drawableStart="@mipmap/ic_bike_rent_new"
+        android:padding="16dp"
+        android:src="@mipmap/ic_bike_rent_new"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,8 +39,8 @@
         android:id="@+id/spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
         android:padding="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -51,22 +49,21 @@
 
     <pl.bclogic.pulsator4droid.library.PulsatorLayout
         android:id="@+id/pulsator"
-        android:layout_width="191dp"
-        android:layout_height="193dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:pulse_color="@color/bluet"
         app:pulse_count="5"
-        app:pulse_duration="7000"
-        app:pulse_interpolator="Accelerate"
+        app:pulse_duration="3000"
+        app:pulse_interpolator="Linear"
         app:pulse_repeat="0"
-        app:pulse_startFromScratch="false" />
-
+        app:pulse_startFromScratch="true" />
 
 
 </android.support.constraint.ConstraintLayout>

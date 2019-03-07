@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void updateUser() {
+    public void updateUser() {
         currentAuthUser = mAuth.getCurrentUser();
         db.collection("users").document(currentAuthUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

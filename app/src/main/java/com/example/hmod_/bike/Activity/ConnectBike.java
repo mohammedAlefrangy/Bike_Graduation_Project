@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.hmod_.bike.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -78,36 +79,33 @@ public class ConnectBike extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        spinner.setEnabled(false);
 
         //PulsatorLayout animation
         pulsator = (PulsatorLayout) rootView.findViewById(R.id.pulsator);
-        pulsator.start();
+        pulsator.stop();
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (!mBluetoothAdapter.isEnabled()) {
-            // We need to enable the Bluetooth, so we ask the user
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            // REQUEST_ENABLE_BT es un valor entero que vale 1
-            startActivityForResult(enableBtIntent, 1);
+        if (mBluetoothAdapter != null) {
+            if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, 1);
+            }
+            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+            MainActivity.mainActivity.registerReceiver(mReceiver, filter);
+            if (mBluetoothAdapter.isDiscovering()) {
+                // Bluetooth is already in modo discovery mode, we cancel to restart it again
+                mBluetoothAdapter.cancelDiscovery();
+            }
+            mBluetoothAdapter.startDiscovery();
+        } else {
+            Toast.makeText(getContext(), "Bluetooth not available.", Toast.LENGTH_LONG).show();
         }
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        MainActivity.mainActivity.registerReceiver(mReceiver, filter);
-        if (mBluetoothAdapter.isDiscovering()) {
-            // Bluetooth is already in modo discovery mode, we cancel to restart it again
-            mBluetoothAdapter.cancelDiscovery();
-        }
-        mBluetoothAdapter.startDiscovery();
-        /*BluetoothManager bluetoothManager = BluetoothManager.getInstance();
-        if (bluetoothManager == null) {
-            // Bluetooth unavailable on this device :( tell the user
-            Toast.makeText(context, "Bluetooth not available.", Toast.LENGTH_LONG).show();
-
-        }*/
         rent_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 connectButton();
-                pulsator.stop();
+                pulsator.start();
             }
         });
 
@@ -126,6 +124,7 @@ public class ConnectBike extends Fragment {
                 Log.i(TAG, "Device found: " + device.getName() + "; MAC " + device.getAddress());
                 if (device.getName().startsWith("Bike-")) {
                     if (blDevices.get(device.getName()) == null) {
+                        spinner.setEnabled(true);
                         blDevices.put(device.getName(), device);
                         blDevicesName.add(device.getName().substring(5));
                         adapter.notifyDataSetChanged();
@@ -137,12 +136,15 @@ public class ConnectBike extends Fragment {
 
     public void connectButton() {
         bikeNumber = (String) spinner.getSelectedItem();
-        BluetoothDevice blDevice = blDevices.get("Bike-" + bikeNumber);
-        Log.d(TAG, "Connect to :" + blDevice.getName());
-        bluetoothManager.openSerialDevice(blDevice.getAddress())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onConnected, this::onError);
+        if (bikeNumber != null) {
+            BluetoothDevice blDevice = blDevices.get("Bike-" + bikeNumber);
+            Log.d(TAG, "Connect to :" + blDevice.getName());
+            bluetoothManager.openSerialDevice(blDevice.getAddress())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::onConnected, this::onError);
+        }
+        // TODO: If we didn't find a bike
     }
 
     private void onConnected(BluetoothSerialDevice connectedDevice) {
@@ -155,10 +157,8 @@ public class ConnectBike extends Fragment {
             public void onSuccess(HttpsCallableResult httpsCallableResult) {
                 if (httpsCallableResult.getData() instanceof Map) {
                     Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
-                    try {
-                        deviceInterface.sendMessage((String) dataObj.get("key"));
-                    } catch (Exception ex) {
-                    }
+                    deviceInterface.sendMessage((String) dataObj.get("key"));
+                    pulsator.stop();
                 }
             }
         });
@@ -192,7 +192,7 @@ public class ConnectBike extends Fragment {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.refresh) {
+        if(id == R.id.refresh){
             Log.d(TAG, "onOptionsItemSelected: " + id);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 AnimatedVectorDrawableCompat.create(getContext(), R.drawable.ic_sync).start();

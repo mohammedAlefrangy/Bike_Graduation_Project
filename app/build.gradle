@@ -65,6 +65,7 @@ dependencies {
 
     //Pulse animation
     implementation 'pl.bclogic:pulsator4droid:1.0.3'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
 }
 
