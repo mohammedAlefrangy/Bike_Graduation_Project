@@ -132,11 +132,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateUI() {
-        ;
         TextView usernameTV = navigationView.getHeaderView(0).findViewById(R.id.userName);
         usernameTV.setText(currentUser.getName());
         TextView creditsTV = navigationView.getHeaderView(0).findViewById(R.id.credits);
         creditsTV.setText("Credits: " + currentUser.getCredits() + " NIS");
+        if (MyAccount.instance!=null) MyAccount.instance.updateUI();
     }
 
 

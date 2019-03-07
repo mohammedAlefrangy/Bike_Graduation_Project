@@ -49,6 +49,7 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
     TextView userNameTV;
     @BindView(R.id.circleImageView)
     ImageView circleIV;
+    public static MyAccount instance;
 
     public MyAccount() {
         // Required empty public constructor
@@ -83,7 +84,6 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
                             Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
                             if ((Boolean) dataObj.get("success")){
                                 MainActivity.mainActivity.updateUser();
-                                updateUI();
                             }
                         }
                     }
@@ -96,6 +96,7 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
                 });
             }
         });
+        instance = this;
         updateUI();
         return rootView;
 
