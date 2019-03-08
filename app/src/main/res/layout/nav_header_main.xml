@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="96dp"
-android:background="?attr/colorPrimaryDark"
-android:padding="16dp"
-android:theme="@style/ThemeOverlay.AppCompat.Dark"
-android:orientation="vertical"
-android:gravity="bottom">
+    android:layout_width="match_parent"
+    android:layout_height="96dp"
+    android:background="?attr/colorPrimaryDark"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-<TextView
-    android:id="@+id/userName"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Mohammed ALMadhoun"
-    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-<TextView
-    android:id="@+id/credits"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Credits: 20 NIS"
-    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-    android:textSize="12sp"
-    android:textStyle="italic"/>
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mohammed ALMadhoun"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:id="@+id/credits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Credits: 20 NIS"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="12sp"
+        android:textStyle="italic" />
 
 </LinearLayout>

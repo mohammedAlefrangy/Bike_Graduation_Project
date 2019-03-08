@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity
         usernameTV.setText(currentUser.getName());
         TextView creditsTV = navigationView.getHeaderView(0).findViewById(R.id.credits);
         creditsTV.setText("Credits: " + currentUser.getCredits() + " NIS");
-        if (MyAccount.instance!=null) MyAccount.instance.updateUI();
+        if (MyAccount.instance != null) MyAccount.instance.updateUI();
     }
 
 
@@ -167,16 +167,20 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = MyRentActivity.class;
         } else if (id == R.id.my_account) {
             fragmentClass = MyAccount.class;
+        } else if (id == R.id.my_trip) {
+            fragmentClass = MyTripActivity.class;
         } else if (id == R.id.where_to_buy_vouchers) {
-
+            fragmentClass = WhereVouchersActivity.class;
         } else if (id == R.id.rate_us) {
 
         } else if (id == R.id.log_out) {
-            fragmentClass = MyAccount.class;
+//            AuthUI.getInstance().signOut(this);
         }
 
         try {
-            fragment = (Fragment) fragmentClass.newInstance();
+            if (fragmentClass != null) {
+                fragment = (Fragment) fragmentClass.newInstance();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

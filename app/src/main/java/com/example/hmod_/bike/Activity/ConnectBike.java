@@ -192,7 +192,7 @@ public class ConnectBike extends Fragment {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if(id == R.id.refresh){
+        if (id == R.id.refresh) {
             Log.d(TAG, "onOptionsItemSelected: " + id);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 AnimatedVectorDrawableCompat.create(getContext(), R.drawable.ic_sync).start();

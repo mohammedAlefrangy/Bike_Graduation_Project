@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,7 +80,7 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
                     public void onSuccess(HttpsCallableResult httpsCallableResult) {
                         if (httpsCallableResult.getData() instanceof Map) {
                             Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
-                            if ((Boolean) dataObj.get("success")){
+                            if ((Boolean) dataObj.get("success")) {
                                 MainActivity.mainActivity.updateUser();
                             }
                         }
@@ -112,7 +110,7 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
             @Override
             public void run() {
                 //Toast.makeText(getActivity(), "Barcode: " + barcode.displayValue, Toast.LENGTH_SHORT).show();
-                codeET.setText( barcode.displayValue);
+                codeET.setText(barcode.displayValue);
             }
         });
     }
@@ -137,10 +135,10 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
         Toast.makeText(getActivity(), "Camera permission denied!", Toast.LENGTH_LONG).show();
     }
 
-    void updateUI (){
+    void updateUI() {
         userNameTV.setText(MainActivity.currentUser.getName());
-        creditsTV.setText(String.format("Credits: %.2f NIS",MainActivity.currentUser.getCredits()));
-        if(!MainActivity.currentUser.getPhoto().isEmpty())
+        creditsTV.setText(String.format("Credits: %.2f NIS", MainActivity.currentUser.getCredits()));
+        if (!MainActivity.currentUser.getPhoto().isEmpty())
             Picasso.get().load(MainActivity.currentUser.getPhoto()).into(circleIV);
 
     }

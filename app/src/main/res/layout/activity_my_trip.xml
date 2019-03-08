@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.MyTripActivity">
+
+
+    <net.crosp.libs.android.circletimeview.CircleTimeView
+        android:id="@+id/circle_timer_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_weight="0.9"
+        app:ctvCircleButtonColor="#099ef4"
+        app:ctvCircleColor="#00d9ff"
+        app:ctvCircleHandButtonRadius="0dp"
+
+        app:ctvCirclePressedButtonColor="#08bfdf"
+        app:ctvCircleStrokeWidth="1dp"
+        app:ctvCurrentTimeInSeconds="200"
+
+        app:ctvHighlightMarkLineColor="#00f7ff"
+        app:ctvLabelText="The сlock is ticking"
+        app:ctvLabelTextColor="#00f7ff"
+        app:ctvLabelTextSize="16sp"
+
+        app:ctvLapBackgroundColor="#9adf1b"
+        app:ctvLapLabelMarginTop="15dp"
+        app:ctvLapLabelTextSize="12sp"
+        app:ctvLapTextColor="#fff"
+
+        app:ctvMarginTopLabel="22dp"
+        app:ctvMarkLineColor="#000000"
+        app:ctvMarkLineWidth="1dp"
+        app:ctvMarkSize="10dp"
+        app:ctvMinutesMarkCount="120"
+        app:ctvMultiLapRotation="false"
+
+        app:ctvPaddingInnerRadius="15dp"
+        app:ctvPaddingQuarterNumber="5dp"
+        app:ctvQuarterMarkSize="20dp"
+        app:ctvQuarterNumberColor="#08ff00"
+
+        app:ctvQuarterNumberTextSize="16sp"
+        app:ctvShowLaps="true"
+        app:ctvTimeFormat="seconds_minutes"
+        app:ctvTimeMode="timer"
+        app:ctvTimeNumberColor="#00d0ff"
+
+        app:ctvTimeNumbersTextSize="55sp"
+        app:layout_constraintBottom_toTopOf="@+id/start_timer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/start_timer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/start_timr"
+        android:textAllCaps="false"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/stop_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="32dp"
+        android:text="@string/stop_timr"
+        android:textAllCaps="false"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/start_timer"
+        app:layout_constraintEnd_toStartOf="@+id/start_timer"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/start_timer"
+        app:layout_constraintVertical_bias="0.0" />
+
+</android.support.constraint.ConstraintLayout>
