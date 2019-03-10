@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -71,19 +72,9 @@ public class MainActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.find_bike);
+        changeFragment (R.id.find_bike);
 
-
-        Fragment fragment = null;
-        Class fragmentClass = null;
-        fragmentClass = MapsActivity.class;
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         //TODO: Move the firebase auth to splach activity
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -159,6 +150,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        changeFragment (id);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void changeFragment (int id) {
         Fragment fragment = null;
         Class fragmentClass = null;
 
@@ -190,11 +188,20 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
-
+    public void setCurrentRent (Rent rent) {
+        MainActivity.currentRent = rent;
+        boolean inRent = currentRent != null;
+        Menu menu = navigationView.getMenu();
+        menu.getItem(1).setVisible(!inRent);
+        menu.getItem(2).setVisible(inRent);
+        if (menu.getItem(1).isChecked()) {
+            changeFragment(R.id.my_trip);
+            navigationView.setCheckedItem(R.id.my_trip);
+        } else if (menu.getItem(2).isChecked()) {
+            changeFragment(R.id.connect_to_bike);
+            navigationView.setCheckedItem(R.id.connect_to_bike);
+        }
+    }
 }

@@ -26,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.hmod_.bike.R;
+import com.example.hmod_.bike.Rent;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.functions.HttpsCallableResult;
 import com.harrysoft.androidbluetoothserial.BluetoothManager;
@@ -149,6 +150,7 @@ public class ConnectBike extends Fragment {
 
     private void onConnected(BluetoothSerialDevice connectedDevice) {
         deviceInterface = connectedDevice.toSimpleDeviceInterface();
+        deviceInterface.setListeners(this::onMessageReceived, null, this::onError);
         if (bikeNumber.isEmpty()) return;
         Map<String, Object> data = new HashMap<>();
         data.put("bike", bikeNumber);
@@ -157,15 +159,24 @@ public class ConnectBike extends Fragment {
             public void onSuccess(HttpsCallableResult httpsCallableResult) {
                 if (httpsCallableResult.getData() instanceof Map) {
                     Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
-                    deviceInterface.sendMessage((String) dataObj.get("key"));
+                    MainActivity.currentBikeKey =  (String) dataObj.get("key");
+                    Rent.updateCurrentRent((String) dataObj.get ("rentId"));
+                    deviceInterface.sendMessage("rent:" + (String) dataObj.get("key"));
                     pulsator.stop();
                 }
             }
         });
 
     }
+    private void onMessageReceived(String message) {
+    }
 
     private void onError(Throwable error) {
+        String errorMsg = error.getMessage();
+        if (errorMsg.contains("socket closed")) {
+            //Connection lost
+        }
+        Log.d("Bluetooth error:", error.getMessage());
         // Handle the error
     }
 

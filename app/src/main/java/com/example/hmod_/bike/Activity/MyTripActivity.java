@@ -8,10 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.hmod_.bike.R;
 
 import net.crosp.libs.android.circletimeview.CircleTimeView;
+
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,6 +24,11 @@ public class MyTripActivity extends Fragment {
 
     @BindView(R.id.circle_timer_view)
     CircleTimeView circle_timer_view;
+    @BindView(R.id.rentedBike)
+    TextView rentedBike;
+    @BindView(R.id.estimatedCharges)
+    TextView estimatedCharges;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -30,27 +38,17 @@ public class MyTripActivity extends Fragment {
 
         //        intentThatStartedThisActivity = Objects.requireNonNull(getActivity()).getIntent();
         ButterKnife.bind(this, rootView);
+        if (MainActivity.currentRent == null) {
+            // TODO: We should show some error
+            return rootView;
+        }
 
-        circle_timer_view.setCurrentTime(0);
+        rentedBike.setText(getString(R.string.rented_bike_number) + MainActivity.currentRent.getBikeNumber());
+        Date now = new Date ();
+
+        circle_timer_view.setCurrentTime( (now.getTime() - MainActivity.currentRent.getStartTime().getTime()) / 1000);
         circle_timer_view.startTimer();
-
-        circle_timer_view.setCircleTimeListener(new CircleTimeView.CircleTimeListener() {
-            @Override
-            public void onTimeManuallySet(long time) {
-                Log.d("TIME LISTENER", "onTimeManuallySet " + time);
-            }
-
-            @Override
-            public void onTimeManuallyChanged(long time) {
-                Log.d("TIME LISTENER", "onTimeManuallyChanged " + time);
-            }
-
-            @Override
-            public void onTimeUpdated(long time) {
-                Log.d("TIME LISTENER", "onTimeUpdated " + time);
-            }
-        });
-
+        String estimatedChargesFormat = getString(R.string.estimated_charges);
         circle_timer_view.setCircleTimerListener(new CircleTimeView.CircleTimerListener() {
             @Override
             public void onTimerStop() {
@@ -65,22 +63,10 @@ public class MyTripActivity extends Fragment {
             @Override
             public void onTimerTimeValueChanged(long time) {
                 Log.d("TIMER LISTENER", "onTimerTimeValueChanged " + time);
+                estimatedCharges.setText(String.format(estimatedChargesFormat , (time/3600.0) * 2));
             }
         });
 
-        /*start_timer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                circle_timer_view.startTimer();
-            }
-        });
-
-        stop_timer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                circle_timer_view.stopTimer();
-            }
-        });*/
         return rootView;
     }
 }

@@ -1,7 +1,10 @@
 package com.example.hmod_.bike;
 
 
+import com.example.hmod_.bike.Activity.MainActivity;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -79,5 +82,14 @@ public class Rent {
     }
     public String getStartTimeAndCost (){
         return formater.format(startTime) +(this.cost != 0 ? String.format(" -- %.2f NIS", this.cost) :"");
+    }
+
+    public static void updateCurrentRent (String id) {
+        MainActivity.db.collection("rents").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                MainActivity.mainActivity.setCurrentRent(documentSnapshot.toObject(Rent.class));
+            }
+        });
     }
 }

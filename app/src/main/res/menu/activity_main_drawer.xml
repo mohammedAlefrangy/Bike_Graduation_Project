@@ -13,6 +13,11 @@
             android:icon="@drawable/ic_car_connected"
             android:title="Connect To Bike" />
         <item
+            android:id="@+id/my_trip"
+            android:icon="@drawable/ic_wallet_travel"
+            android:title="My Trip"
+            android:visible="false" />
+        <item
             android:id="@+id/my_rents"
             android:icon="@drawable/ic_information_variant"
             android:title="My Rents" />
@@ -20,10 +25,7 @@
             android:id="@+id/my_account"
             android:icon="@drawable/ic_account"
             android:title="My Account" />
-        <item
-            android:id="@+id/my_trip"
-            android:icon="@drawable/ic_wallet_travel"
-            android:title="My Trip" />
+
     </group>
 
     <item android:title="Other">
