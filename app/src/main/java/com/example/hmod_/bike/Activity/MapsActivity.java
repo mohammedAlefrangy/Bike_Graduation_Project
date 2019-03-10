@@ -1,6 +1,13 @@
 package com.example.hmod_.bike.Activity;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -85,9 +92,21 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
         });
 
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31.5210764, 34.44328), 15.0f));
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
-        mMap.setMyLocationEnabled(true);
+            LocationManager locationManager = (LocationManager)
+                    getActivity().getSystemService(getContext().LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+
+            Location location = locationManager.getLastKnownLocation(locationManager
+                    .getBestProvider(criteria, false));
+            if (location != null) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.0f));
+            } else {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31.5210764, 34.44328), 10.0f));
+            }
+            mMap.setMyLocationEnabled(true);
+        }
     }
 }

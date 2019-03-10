@@ -172,8 +172,10 @@ public class ConnectBike extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mBluetoothAdapter.cancelDiscovery();
-        MainActivity.mainActivity.unregisterReceiver(mReceiver);
+        if (mBluetoothAdapter != null) {
+            mBluetoothAdapter.cancelDiscovery();
+            MainActivity.mainActivity.unregisterReceiver(mReceiver);
+        }
 
     }
 
