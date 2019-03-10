@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.hmod_.bike.Adapter.AdapterForListItem;
@@ -36,6 +37,8 @@ public class MyRentActivity extends Fragment implements AdapterForListItem.OnIte
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -58,6 +61,7 @@ public class MyRentActivity extends Fragment implements AdapterForListItem.OnIte
         MainActivity.db.collection("rents").whereEqualTo("uid", MainActivity.currentAuthUser.getUid()).orderBy("startTime", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                progressBar.setVisibility(View.GONE);
                 for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
                     Rent currentRent = documentChange.getDocument().toObject(Rent.class);
                     rents.add(currentRent);

@@ -10,20 +10,19 @@ public class Rent {
     private String uid;
     private Date startTime;
     private Date endTime;
-    private Timestamp test;
     private float cost;
+    private String bikeNumber;
     private static SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd hh:mma");
 
     public Rent(){
-
     }
 
-    public Rent(String uid, Date startTime, Date endTime, float cost) {
+    public Rent(String uid, Date startTime, Date endTime, float cost, String bikeNumber) {
         this.uid = uid;
         this.startTime = startTime;
         this.endTime = endTime;
-        
         this.cost = cost;
+        this.bikeNumber = bikeNumber;
     }
 
     public String getUid() {
@@ -56,6 +55,14 @@ public class Rent {
 
     public void setCost(float cost) {
         this.cost = cost;
+    }
+
+    public String getBikeNumber() {
+        return bikeNumber;
+    }
+
+    public void setBikeNumber(String bikeNumber) {
+        this.bikeNumber = bikeNumber;
     }
 
     public String getDuration (){

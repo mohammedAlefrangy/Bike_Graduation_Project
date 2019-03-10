@@ -9,81 +9,95 @@
 
     <net.crosp.libs.android.circletimeview.CircleTimeView
         android:id="@+id/circle_timer_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_width="250dp"
+        android:layout_height="261dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:layout_weight="0.9"
-        app:ctvCircleButtonColor="#099ef4"
-        app:ctvCircleColor="#00d9ff"
-        app:ctvCircleHandButtonRadius="0dp"
 
-        app:ctvCirclePressedButtonColor="#08bfdf"
-        app:ctvCircleStrokeWidth="1dp"
-        app:ctvCurrentTimeInSeconds="200"
+        app:ctvCircleButtonColor="#888"
+        app:ctvCircleColor="#777"
+        app:ctvCircleHandButtonRadius="6dp"
 
-        app:ctvHighlightMarkLineColor="#00f7ff"
-        app:ctvLabelText="The сlock is ticking"
-        app:ctvLabelTextColor="#00f7ff"
-        app:ctvLabelTextSize="16sp"
-
-        app:ctvLapBackgroundColor="#9adf1b"
-        app:ctvLapLabelMarginTop="15dp"
-        app:ctvLapLabelTextSize="12sp"
-        app:ctvLapTextColor="#fff"
-
-        app:ctvMarginTopLabel="22dp"
-        app:ctvMarkLineColor="#000000"
-        app:ctvMarkLineWidth="1dp"
-        app:ctvMarkSize="10dp"
-        app:ctvMinutesMarkCount="120"
-        app:ctvMultiLapRotation="false"
-
-        app:ctvPaddingInnerRadius="15dp"
-        app:ctvPaddingQuarterNumber="5dp"
-        app:ctvQuarterMarkSize="20dp"
-        app:ctvQuarterNumberColor="#08ff00"
-
-        app:ctvQuarterNumberTextSize="16sp"
-        app:ctvShowLaps="true"
+        app:ctvHighlightMarkLineColor="#000"
+        app:ctvLabelTextColor="#000"
+        app:ctvMarkLineColor="#ccc"
+        app:ctvMinutesMarkCount="60"
+        app:ctvQuarterNumberColor="#999"
+        app:ctvShowLaps="false"
         app:ctvTimeFormat="seconds_minutes"
-        app:ctvTimeMode="timer"
-        app:ctvTimeNumberColor="#00d0ff"
+        app:ctvTimeMode="normal"
+        app:ctvTimeNumberColor="#555"
 
-        app:ctvTimeNumbersTextSize="55sp"
-        app:layout_constraintBottom_toTopOf="@+id/start_timer"
+
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/start_timer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/start_timr"
-        android:textAllCaps="false"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/stop_timer"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="32dp"
-        android:text="@string/stop_timr"
-        android:textAllCaps="false"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/start_timer"
-        app:layout_constraintEnd_toStartOf="@+id/start_timer"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:text="@string/rented_bike_number_1001"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/start_timer"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/circle_timer_view" />
+
+    <TextView
+        android:id="@+id/estimatedCharges"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/estimated_charges_2_nis"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/connected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/connected"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/estimatedCharges" />
+
+    <Button
+        android:id="@+id/parkBike"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/park_the_bike"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.106"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connected" />
+
+    <Button
+        android:id="@+id/returnBike"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/return_the_bike"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toEndOf="@+id/parkBike"
+        app:layout_constraintTop_toTopOf="@+id/parkBike" />
+
 
 </android.support.constraint.ConstraintLayout>

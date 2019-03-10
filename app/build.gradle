@@ -67,6 +67,6 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     //Circle Time View
-    implementation 'net.crosp.libs.android:circle-time-view:1.0.6'
+    implementation 'com.github.Mohelm97:circle-time-view:42f9239105'
 
 }

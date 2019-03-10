@@ -21,10 +21,6 @@ public class MyTripActivity extends Fragment {
 
     @BindView(R.id.circle_timer_view)
     CircleTimeView circle_timer_view;
-    @BindView(R.id.start_timer)
-    Button start_timer;
-    @BindView(R.id.stop_timer)
-    Button stop_timer;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -35,7 +31,8 @@ public class MyTripActivity extends Fragment {
         //        intentThatStartedThisActivity = Objects.requireNonNull(getActivity()).getIntent();
         ButterKnife.bind(this, rootView);
 
-        circle_timer_view.setCurrentTime(20000);
+        circle_timer_view.setCurrentTime(0);
+        circle_timer_view.startTimer();
 
         circle_timer_view.setCircleTimeListener(new CircleTimeView.CircleTimeListener() {
             @Override
@@ -71,7 +68,7 @@ public class MyTripActivity extends Fragment {
             }
         });
 
-        start_timer.setOnClickListener(new View.OnClickListener() {
+        /*start_timer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 circle_timer_view.startTimer();
@@ -83,7 +80,7 @@ public class MyTripActivity extends Fragment {
             public void onClick(View v) {
                 circle_timer_view.stopTimer();
             }
-        });
+        });*/
         return rootView;
     }
 }

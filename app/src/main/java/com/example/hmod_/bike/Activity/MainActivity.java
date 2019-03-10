@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.hmod_.bike.R;
+import com.example.hmod_.bike.Rent;
 import com.example.hmod_.bike.User;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity
     public static FirebaseFunctions ff = FirebaseFunctions.getInstance();
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static MainActivity mainActivity;
+    public static Rent currentRent = null;
+    public static String currentBikeKey = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
