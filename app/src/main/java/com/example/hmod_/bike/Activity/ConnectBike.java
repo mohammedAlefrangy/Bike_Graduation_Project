@@ -25,6 +25,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.hmod_.bike.BluetoothControlUnit;
+import com.example.hmod_.bike.BluetoothListener;
 import com.example.hmod_.bike.R;
 import com.example.hmod_.bike.Rent;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,7 +46,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
-public class ConnectBike extends Fragment {
+public class ConnectBike extends Fragment implements BluetoothListener {
 
 //    Intent intentThatStartedThisActivity;
 
@@ -59,8 +61,7 @@ public class ConnectBike extends Fragment {
     private ArrayAdapter<String> adapter;
     private BluetoothAdapter mBluetoothAdapter;
     private final String TAG = "bluetooth";
-    BluetoothManager bluetoothManager = BluetoothManager.getInstance();
-    private SimpleBluetoothDeviceInterface deviceInterface;
+
     private String bikeNumber = "";
     private Menu mMenu;
 
@@ -110,7 +111,7 @@ public class ConnectBike extends Fragment {
             }
         });
 
-
+        MainActivity.mainActivity.getSupportActionBar().setTitle("Connect To A Bike");
         return rootView;
 
     }
@@ -140,44 +141,11 @@ public class ConnectBike extends Fragment {
         if (bikeNumber != null) {
             BluetoothDevice blDevice = blDevices.get("Bike-" + bikeNumber);
             Log.d(TAG, "Connect to :" + blDevice.getName());
-            bluetoothManager.openSerialDevice(blDevice.getAddress())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::onConnected, this::onError);
+            BluetoothControlUnit.getInstance().setListener(this);
+            BluetoothControlUnit.getInstance().connectToDevice(blDevice);
+
         }
         // TODO: If we didn't find a bike
-    }
-
-    private void onConnected(BluetoothSerialDevice connectedDevice) {
-        deviceInterface = connectedDevice.toSimpleDeviceInterface();
-        deviceInterface.setListeners(this::onMessageReceived, null, this::onError);
-        if (bikeNumber.isEmpty()) return;
-        Map<String, Object> data = new HashMap<>();
-        data.put("bike", bikeNumber);
-        MainActivity.ff.getHttpsCallable("rentBike").call(data).addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
-            @Override
-            public void onSuccess(HttpsCallableResult httpsCallableResult) {
-                if (httpsCallableResult.getData() instanceof Map) {
-                    Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
-                    MainActivity.currentBikeKey =  (String) dataObj.get("key");
-                    Rent.updateCurrentRent((String) dataObj.get ("rentId"));
-                    deviceInterface.sendMessage("rent:" + (String) dataObj.get("key"));
-                    pulsator.stop();
-                }
-            }
-        });
-
-    }
-    private void onMessageReceived(String message) {
-    }
-
-    private void onError(Throwable error) {
-        String errorMsg = error.getMessage();
-        if (errorMsg.contains("socket closed")) {
-            //Connection lost
-        }
-        Log.d("Bluetooth error:", error.getMessage());
-        // Handle the error
     }
 
     @Override
@@ -220,4 +188,32 @@ public class ConnectBike extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onConnected(SimpleBluetoothDeviceInterface deviceInterface) {
+        if (bikeNumber.isEmpty()) return;
+        Map<String, Object> data = new HashMap<>();
+        data.put("bike", bikeNumber);
+        MainActivity.ff.getHttpsCallable("rentBike").call(data).addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+            @Override
+            public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                if (httpsCallableResult.getData() instanceof Map) {
+                    Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
+                    MainActivity.currentBikeKey =  (String) dataObj.get("key");
+                    Rent.updateCurrentRent((String) dataObj.get ("rentId"));
+                    deviceInterface.sendMessage("rent:" + (String) dataObj.get("key"));
+                    pulsator.stop();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onMessageReceived(String message) {
+
+    }
+
+    @Override
+    public void onError(Throwable error) {
+
+    }
 }

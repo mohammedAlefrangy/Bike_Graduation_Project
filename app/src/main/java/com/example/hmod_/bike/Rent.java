@@ -16,6 +16,7 @@ public class Rent {
     private float cost;
     private String bikeNumber;
     private static SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd hh:mma");
+    public String id;
 
     public Rent(){
     }
@@ -85,10 +86,15 @@ public class Rent {
     }
 
     public static void updateCurrentRent (String id) {
+        if (id == null) {
+            MainActivity.mainActivity.setCurrentRent(null);
+            return;
+        }
         MainActivity.db.collection("rents").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 MainActivity.mainActivity.setCurrentRent(documentSnapshot.toObject(Rent.class));
+                MainActivity.currentRent.id = id;
             }
         });
     }

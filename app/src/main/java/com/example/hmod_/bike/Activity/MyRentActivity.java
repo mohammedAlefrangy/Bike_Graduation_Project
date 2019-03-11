@@ -53,7 +53,7 @@ public class MyRentActivity extends Fragment implements AdapterForListItem.OnIte
 
 
         initText();
-
+        MainActivity.mainActivity.getSupportActionBar().setTitle("My Rents");
         return rootView;
     }
 

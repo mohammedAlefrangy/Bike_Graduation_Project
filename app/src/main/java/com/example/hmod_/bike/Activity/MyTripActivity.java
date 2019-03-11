@@ -3,23 +3,34 @@ package com.example.hmod_.bike.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.hmod_.bike.BluetoothControlUnit;
+import com.example.hmod_.bike.BluetoothListener;
 import com.example.hmod_.bike.R;
+import com.example.hmod_.bike.Rent;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.functions.HttpsCallableResult;
+import com.harrysoft.androidbluetoothserial.SimpleBluetoothDeviceInterface;
 
 import net.crosp.libs.android.circletimeview.CircleTimeView;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MyTripActivity extends Fragment {
+public class MyTripActivity extends Fragment implements BluetoothListener {
     //    Intent intentThatStartedThisActivity;
 
     @BindView(R.id.circle_timer_view)
@@ -28,6 +39,10 @@ public class MyTripActivity extends Fragment {
     TextView rentedBike;
     @BindView(R.id.estimatedCharges)
     TextView estimatedCharges;
+    @BindView(R.id.returnBike)
+    Button returnBikeBtn;
+    @BindView(R.id.parkBike)
+    Button parkBikeBtn;
 
 
     @Override
@@ -42,13 +57,15 @@ public class MyTripActivity extends Fragment {
             // TODO: We should show some error
             return rootView;
         }
+        BluetoothControlUnit.getInstance().setListener(this);
 
-        rentedBike.setText(getString(R.string.rented_bike_number) + MainActivity.currentRent.getBikeNumber());
+        rentedBike.setText(getString(R.string.rented_bike_number) + " " + MainActivity.currentRent.getBikeNumber());
         Date now = new Date ();
-
-        circle_timer_view.setCurrentTime( (now.getTime() - MainActivity.currentRent.getStartTime().getTime()) / 1000);
+        long currentDuration = (now.getTime() - MainActivity.currentRent.getStartTime().getTime()) / 1000;
+        circle_timer_view.setCurrentTime(currentDuration);
         circle_timer_view.startTimer();
         String estimatedChargesFormat = getString(R.string.estimated_charges);
+        estimatedCharges.setText(String.format(estimatedChargesFormat , (currentDuration/3600.0) * 2));
         circle_timer_view.setCircleTimerListener(new CircleTimeView.CircleTimerListener() {
             @Override
             public void onTimerStop() {
@@ -66,7 +83,57 @@ public class MyTripActivity extends Fragment {
                 estimatedCharges.setText(String.format(estimatedChargesFormat , (time/3600.0) * 2));
             }
         });
-
+        returnBikeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                returnBike ();
+            }
+        });
+        MainActivity.mainActivity.getSupportActionBar().setTitle("My Trip");
         return rootView;
+    }
+
+    private void returnBike () {
+        Log.d("sendmes", "retu:" + MainActivity.currentBikeKey);
+        SimpleBluetoothDeviceInterface deviceInterface = BluetoothControlUnit.getInstance().getDeviceInterface();
+        deviceInterface.sendMessage("retu:" + MainActivity.currentBikeKey);
+    }
+
+    @Override
+    public void onConnected(SimpleBluetoothDeviceInterface deviceInterface) {
+
+    }
+
+    @Override
+    public void onMessageReceived(String message) {
+        if (message.startsWith("retu:")) {
+            String returnKey = message.substring(5);
+            Map<String, Object> data = new HashMap<>();
+            data.put("bike", MainActivity.currentRent.getBikeNumber());
+            data.put("key", returnKey);
+            data.put("rentid", MainActivity.currentRent.id);
+            data.put("station", "nbqE62Fk1sk0ybcIllob");
+            MainActivity.ff.getHttpsCallable("returnBike").call(data).addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                @Override
+                public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                    MainActivity.currentBikeKey =  null;
+                    Rent.updateCurrentRent(null);
+                    if (httpsCallableResult.getData() instanceof Map) {
+                        Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
+                        Toast.makeText(getActivity(), (String) dataObj.get("msg"), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onError(Throwable error) {
+
     }
 }

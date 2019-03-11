@@ -54,5 +54,5 @@
     <string name="connected">Connected</string>
     <string name="park_the_bike">Park the bike</string>
     <string name="return_the_bike">return the bike</string>
-    <string name="rented_bike_number">Rented Bike Number: </string>
+    <string name="rented_bike_number">Rented Bike Number:</string>
 </resources>

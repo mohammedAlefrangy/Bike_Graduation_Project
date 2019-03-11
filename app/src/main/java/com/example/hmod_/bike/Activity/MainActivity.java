@@ -200,8 +200,8 @@ public class MainActivity extends AppCompatActivity
             changeFragment(R.id.my_trip);
             navigationView.setCheckedItem(R.id.my_trip);
         } else if (menu.getItem(2).isChecked()) {
-            changeFragment(R.id.connect_to_bike);
-            navigationView.setCheckedItem(R.id.connect_to_bike);
+            changeFragment(R.id.my_rents);
+            navigationView.setCheckedItem(R.id.my_rents);
         }
     }
 }

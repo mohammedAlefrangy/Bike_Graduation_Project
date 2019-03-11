@@ -96,6 +96,7 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
         });
         instance = this;
         updateUI();
+        MainActivity.mainActivity.getSupportActionBar().setTitle("My Account");
         return rootView;
 
     }

@@ -10,10 +10,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.example.hmod_.bike.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -34,6 +37,7 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
     private HashMap<String, Marker> markers = new HashMap<>();
 
     public MapsActivity() {
+        MainActivity.mainActivity.getSupportActionBar().setTitle("Stations Map");
     }
 
     @Override
@@ -65,7 +69,7 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
-        MainActivity.db.collection("bikes").whereEqualTo("available", true).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        MainActivity.db.collection("stations").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot snapshots,
                                 @Nullable FirebaseFirestoreException e) {
@@ -76,7 +80,11 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
                     GeoPoint geoPoint = dc.getDocument().getGeoPoint("location");
                     if (dc.getType() == DocumentChange.Type.ADDED) {
+                        int icon = R.drawable.empty_station;
+                        if (dc.getDocument().getLong("bikes") != 0)
+                            icon = R.drawable.notempty_station;
                         Marker docmarker = mMap.addMarker(new MarkerOptions()
+                                .icon(BitmapDescriptorFactory.fromResource(icon))
                                 .position(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()))
                         );
                         markers.put(dc.getDocument().getId(), docmarker);
@@ -84,7 +92,11 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
                         markers.get(dc.getDocument().getId()).remove();
                         markers.remove(dc.getDocument().getId());
                     } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                        int icon = R.drawable.empty_station;
+                        if (dc.getDocument().getLong("bikes") != 0)
+                            icon = R.drawable.notempty_station;
                         markers.get(dc.getDocument().getId()).setPosition(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
+                        markers.get(dc.getDocument().getId()).setIcon(BitmapDescriptorFactory.fromResource(icon));
                     }
                 }
 
