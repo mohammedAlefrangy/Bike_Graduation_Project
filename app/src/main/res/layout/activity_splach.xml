@@ -8,6 +8,7 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_bike_parking" />
+        android:src="@drawable/ic_bike_parking"
+        android:contentDescription="TODO" />
 
 </RelativeLayout>

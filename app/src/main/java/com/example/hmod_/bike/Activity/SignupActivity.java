@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,16 +22,22 @@ public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
     @BindView(R.id.input_name)
+    private
     EditText nameText;
     @BindView(R.id.input_email)
+    private
     EditText emailText;
     @BindView(R.id.input_password)
+    private
     EditText passwordText;
     @BindView(R.id.reinput_password)
+    private
     EditText re_password;
     @BindView(R.id.btn_signup)
+    private
     Button signupButton;
     @BindView(R.id.link_login)
+    private
     TextView loginLink;
 
 
@@ -44,26 +49,18 @@ public class SignupActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("SIGNUP to CityBikes");
 
 
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signup();
-            }
-        });
+        signupButton.setOnClickListener(v -> signup());
 
-        loginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Finish the registration screen and return to the Login activity
-                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        loginLink.setOnClickListener(v -> {
+            // Finish the registration screen and return to the Login activity
+            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
 
     }
 
-    public void signup() {
+    private void signup() {
         Log.d(TAG, "Signup");
 
         if (!validate()) {
@@ -88,31 +85,29 @@ public class SignupActivity extends AppCompatActivity {
 
 
         new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
+                () -> {
+                    // On complete call either onSignupSuccess or onSignupFailed
+                    // depending on success
+                    onSignupSuccess();
+                    // onSignupFailed();
+                    progressDialog.dismiss();
                 }, 3000);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
-    public void onSignupSuccess() {
+    private void onSignupSuccess() {
         signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
         finish();
     }
 
-    public void onSignupFailed() {
+    private void onSignupFailed() {
         Toast.makeText(getBaseContext(), R.string.failed, Toast.LENGTH_LONG).show();
         signupButton.setEnabled(true);
     }
 
-    public boolean validate() {
+    private boolean validate() {
         boolean valid = true;
 
         String name = nameText.getText().toString();

@@ -1,12 +1,10 @@
 package com.example.hmod_.bike.Activity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -15,16 +13,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 
@@ -34,7 +28,7 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private GoogleMap mMap;
-    private HashMap<String, Marker> markers = new HashMap<>();
+    private final HashMap<String, Marker> markers = new HashMap<>();
 
     public MapsActivity() {
         MainActivity.mainActivity.getSupportActionBar().setTitle("Stations Map");
@@ -69,38 +63,34 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
-        MainActivity.db.collection("stations").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot snapshots,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    return;
-                }
-
-                for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    GeoPoint geoPoint = dc.getDocument().getGeoPoint("location");
-                    if (dc.getType() == DocumentChange.Type.ADDED) {
-                        int icon = R.drawable.empty_station;
-                        if (dc.getDocument().getLong("bikes") != 0)
-                            icon = R.drawable.notempty_station;
-                        Marker docmarker = mMap.addMarker(new MarkerOptions()
-                                .icon(BitmapDescriptorFactory.fromResource(icon))
-                                .position(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()))
-                        );
-                        markers.put(dc.getDocument().getId(), docmarker);
-                    } else if (dc.getType() == DocumentChange.Type.REMOVED) {
-                        markers.get(dc.getDocument().getId()).remove();
-                        markers.remove(dc.getDocument().getId());
-                    } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
-                        int icon = R.drawable.empty_station;
-                        if (dc.getDocument().getLong("bikes") != 0)
-                            icon = R.drawable.notempty_station;
-                        markers.get(dc.getDocument().getId()).setPosition(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
-                        markers.get(dc.getDocument().getId()).setIcon(BitmapDescriptorFactory.fromResource(icon));
-                    }
-                }
-
+        MainActivity.db.collection("stations").addSnapshotListener((snapshots, e) -> {
+            if (e != null) {
+                return;
             }
+
+            for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                GeoPoint geoPoint = dc.getDocument().getGeoPoint("location");
+                if (dc.getType() == DocumentChange.Type.ADDED) {
+                    int icon = R.drawable.empty_station;
+                    if (dc.getDocument().getLong("bikes") != 0)
+                        icon = R.drawable.notempty_station;
+                    Marker docmarker = mMap.addMarker(new MarkerOptions()
+                            .icon(BitmapDescriptorFactory.fromResource(icon))
+                            .position(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()))
+                    );
+                    markers.put(dc.getDocument().getId(), docmarker);
+                } else if (dc.getType() == DocumentChange.Type.REMOVED) {
+                    markers.get(dc.getDocument().getId()).remove();
+                    markers.remove(dc.getDocument().getId());
+                } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                    int icon = R.drawable.empty_station;
+                    if (dc.getDocument().getLong("bikes") != 0)
+                        icon = R.drawable.notempty_station;
+                    markers.get(dc.getDocument().getId()).setPosition(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
+                    markers.get(dc.getDocument().getId()).setIcon(BitmapDescriptorFactory.fromResource(icon));
+                }
+            }
+
         });
 
 

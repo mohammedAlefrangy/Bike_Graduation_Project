@@ -15,10 +15,8 @@ import android.widget.Toast;
 import com.example.hmod_.bike.Adapter.AdapterForListItem;
 import com.example.hmod_.bike.R;
 import com.example.hmod_.bike.Rent;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -28,23 +26,22 @@ import butterknife.ButterKnife;
 
 public class MyRentActivity extends Fragment implements AdapterForListItem.OnItemClickListener {
 
-    GridLayoutManager layoutManager;
-    private AdapterForListItem mAdapter;
     private AdapterForListItem.OnItemClickListener onItemClickListener;
 
-    private ArrayList<Rent> rents = new ArrayList<>();
-    Intent intentThatStartedThisActivity;
+    private final ArrayList<Rent> rents = new ArrayList<>();
 
     @BindView(R.id.recyclerView)
+    private
     RecyclerView recyclerView;
     @BindView(R.id.progress_bar)
+    private
     ProgressBar progressBar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_my_rent, container, false);
-        intentThatStartedThisActivity = Objects.requireNonNull(getActivity()).getIntent();
+        Intent intentThatStartedThisActivity = Objects.requireNonNull(getActivity()).getIntent();
         ButterKnife.bind(this, rootView);
 
 //        recyclerView = rootView.findViewById(R.id.recyclerView);
@@ -58,15 +55,12 @@ public class MyRentActivity extends Fragment implements AdapterForListItem.OnIte
     }
 
     private void initText() {
-        MainActivity.db.collection("rents").whereEqualTo("uid", MainActivity.currentAuthUser.getUid()).orderBy("startTime", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                progressBar.setVisibility(View.GONE);
-                for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
-                    Rent currentRent = documentChange.getDocument().toObject(Rent.class);
-                    rents.add(currentRent);
-                    initRecyclerView();
-                }
+        MainActivity.db.collection("rents").whereEqualTo("uid", MainActivity.currentAuthUser.getUid()).orderBy("startTime", Query.Direction.DESCENDING).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            progressBar.setVisibility(View.GONE);
+            for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
+                Rent currentRent = documentChange.getDocument().toObject(Rent.class);
+                rents.add(currentRent);
+                initRecyclerView();
             }
         });
 
@@ -75,9 +69,9 @@ public class MyRentActivity extends Fragment implements AdapterForListItem.OnIte
 
     private void initRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        mAdapter = new AdapterForListItem(rents, getContext(), onItemClickListener);
+        AdapterForListItem mAdapter = new AdapterForListItem(rents, getContext(), onItemClickListener);
         recyclerView.setAdapter(mAdapter);
-        layoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
     }
 

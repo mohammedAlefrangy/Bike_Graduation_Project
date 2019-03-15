@@ -2,9 +2,6 @@ package com.example.hmod_.bike;
 
 
 import com.example.hmod_.bike.Activity.MainActivity;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +12,7 @@ public class Rent {
     private Date endTime;
     private float cost;
     private String bikeNumber;
-    private static SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd hh:mma");
+    private static final SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd hh:mma");
     public String id;
 
     public Rent(){
@@ -90,12 +87,9 @@ public class Rent {
             MainActivity.mainActivity.setCurrentRent(null);
             return;
         }
-        MainActivity.db.collection("rents").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                MainActivity.mainActivity.setCurrentRent(documentSnapshot.toObject(Rent.class));
-                MainActivity.currentRent.id = id;
-            }
+        MainActivity.db.collection("rents").document(id).get().addOnSuccessListener(documentSnapshot -> {
+            MainActivity.mainActivity.setCurrentRent(documentSnapshot.toObject(Rent.class));
+            MainActivity.currentRent.id = id;
         });
     }
 }

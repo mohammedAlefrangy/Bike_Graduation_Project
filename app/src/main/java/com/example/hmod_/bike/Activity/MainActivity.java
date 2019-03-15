@@ -2,7 +2,6 @@ package com.example.hmod_.bike.Activity;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -21,8 +20,6 @@ import com.example.hmod_.bike.R;
 import com.example.hmod_.bike.Rent;
 import com.example.hmod_.bike.User;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,15 +37,15 @@ public class MainActivity extends AppCompatActivity
 
     @BindView(R.id.location)
     ImageButton location;
-    NavigationView navigationView;
+    private NavigationView navigationView;
 
     private static final int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
     public static FirebaseUser currentAuthUser;
 
     public static User currentUser;
-    public static FirebaseFunctions ff = FirebaseFunctions.getInstance();
-    public static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static final FirebaseFunctions ff = FirebaseFunctions.getInstance();
+    public static final FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static MainActivity mainActivity;
     public static Rent currentRent = null;
     public static String currentBikeKey = "";
@@ -61,16 +58,16 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.find_bike);
         changeFragment (R.id.find_bike);
@@ -88,7 +85,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void createSignInIntent() {
+    private void createSignInIntent() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
@@ -107,20 +104,17 @@ public class MainActivity extends AppCompatActivity
 
     public void updateUser() {
         currentAuthUser = mAuth.getCurrentUser();
-        db.collection("users").document(currentAuthUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        currentUser = document.toObject(User.class);
+        db.collection("users").document(currentAuthUser.getUid()).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    currentUser = document.toObject(User.class);
 
-                    } else {
-                        currentUser = new User(currentAuthUser);
-                        db.collection("users").document(currentAuthUser.getUid()).set(currentUser);
-                    }
-                    updateUI();
+                } else {
+                    currentUser = new User(currentAuthUser);
+                    db.collection("users").document(currentAuthUser.getUid()).set(currentUser);
                 }
+                updateUI();
             }
         });
     }
@@ -136,7 +130,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -151,7 +145,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         changeFragment (id);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

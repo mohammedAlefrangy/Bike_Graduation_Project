@@ -16,10 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hmod_.bike.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.barcode.Barcode;
-import com.google.firebase.functions.HttpsCallableResult;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -38,14 +35,19 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
 
     private BarcodeReader barcodeReader;
     @BindView(R.id.codeET)
+    private
     EditText codeET;
     @BindView(R.id.add)
+    private
     Button addBtn;
     @BindView(R.id.credits)
+    private
     TextView creditsTV;
     @BindView(R.id.userName)
+    private
     TextView userNameTV;
     @BindView(R.id.circleImageView)
+    private
     ImageView circleIV;
     public static MyAccount instance;
 
@@ -70,29 +72,17 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
         barcodeReader = (BarcodeReader) getChildFragmentManager().findFragmentById(R.id.barcode_fragment);
         barcodeReader.setListener(this);
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Map<String, Object> data = new HashMap<>();
-                data.put("voucher", codeET.getText().toString());
-                MainActivity.ff.getHttpsCallable("updateCredits").call(data).addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
-                    @Override
-                    public void onSuccess(HttpsCallableResult httpsCallableResult) {
-                        if (httpsCallableResult.getData() instanceof Map) {
-                            Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
-                            if ((Boolean) dataObj.get("success")) {
-                                MainActivity.mainActivity.updateUser();
-                            }
-                        }
+        addBtn.setOnClickListener(view -> {
+            Map<String, Object> data = new HashMap<>();
+            data.put("voucher", codeET.getText().toString());
+            MainActivity.ff.getHttpsCallable("updateCredits").call(data).addOnSuccessListener(httpsCallableResult -> {
+                if (httpsCallableResult.getData() instanceof Map) {
+                    Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
+                    if ((Boolean) dataObj.get("success")) {
+                        MainActivity.mainActivity.updateUser();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+                }
+            }).addOnFailureListener(e -> Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show());
         });
         instance = this;
         updateUI();
@@ -107,12 +97,9 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
         Log.e(TAG, "onScanned: " + barcode.displayValue);
         barcodeReader.playBeep();
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //Toast.makeText(getActivity(), "Barcode: " + barcode.displayValue, Toast.LENGTH_SHORT).show();
-                codeET.setText(barcode.displayValue);
-            }
+        getActivity().runOnUiThread(() -> {
+            //Toast.makeText(getActivity(), "Barcode: " + barcode.displayValue, Toast.LENGTH_SHORT).show();
+            codeET.setText(barcode.displayValue);
         });
     }
 

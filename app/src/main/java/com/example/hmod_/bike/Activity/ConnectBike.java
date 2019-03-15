@@ -29,10 +29,6 @@ import com.example.hmod_.bike.BluetoothControlUnit;
 import com.example.hmod_.bike.BluetoothListener;
 import com.example.hmod_.bike.R;
 import com.example.hmod_.bike.Rent;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.functions.HttpsCallableResult;
-import com.harrysoft.androidbluetoothserial.BluetoothManager;
-import com.harrysoft.androidbluetoothserial.BluetoothSerialDevice;
 import com.harrysoft.androidbluetoothserial.SimpleBluetoothDeviceInterface;
 
 import java.util.ArrayList;
@@ -42,8 +38,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 public class ConnectBike extends Fragment implements BluetoothListener {
@@ -51,13 +45,15 @@ public class ConnectBike extends Fragment implements BluetoothListener {
 //    Intent intentThatStartedThisActivity;
 
     @BindView(R.id.rent_now)
+    private
     Button rent_now;
     @BindView(R.id.spinner)
+    private
     Spinner spinner;
-    PulsatorLayout pulsator;
+    private PulsatorLayout pulsator;
 
-    private HashMap<String, BluetoothDevice> blDevices = new HashMap<>();
-    private List<String> blDevicesName = new ArrayList<String>();
+    private final HashMap<String, BluetoothDevice> blDevices = new HashMap<>();
+    private final List<String> blDevicesName = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private BluetoothAdapter mBluetoothAdapter;
     private final String TAG = "bluetooth";
@@ -76,7 +72,7 @@ public class ConnectBike extends Fragment implements BluetoothListener {
 //        getSupportActionBar().setTitle("Connect to a bike");
 
         // Create an ArrayAdapter using the string array and a default spinner layout
-        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, blDevicesName);
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, blDevicesName);
         // Specify the layout to use when the list of choices appearsfinal private
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
@@ -84,7 +80,7 @@ public class ConnectBike extends Fragment implements BluetoothListener {
         spinner.setEnabled(false);
 
         //PulsatorLayout animation
-        pulsator = (PulsatorLayout) rootView.findViewById(R.id.pulsator);
+        pulsator = rootView.findViewById(R.id.pulsator);
         pulsator.stop();
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -103,12 +99,9 @@ public class ConnectBike extends Fragment implements BluetoothListener {
         } else {
             Toast.makeText(getContext(), "Bluetooth not available.", Toast.LENGTH_LONG).show();
         }
-        rent_now.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                connectButton();
-                pulsator.start();
-            }
+        rent_now.setOnClickListener(v -> {
+            connectButton();
+            pulsator.start();
         });
 
         MainActivity.mainActivity.getSupportActionBar().setTitle("Connect To A Bike");
@@ -136,7 +129,7 @@ public class ConnectBike extends Fragment implements BluetoothListener {
         }
     };
 
-    public void connectButton() {
+    private void connectButton() {
         bikeNumber = (String) spinner.getSelectedItem();
         if (bikeNumber != null) {
             BluetoothDevice blDevice = blDevices.get("Bike-" + bikeNumber);
@@ -193,16 +186,13 @@ public class ConnectBike extends Fragment implements BluetoothListener {
         if (bikeNumber.isEmpty()) return;
         Map<String, Object> data = new HashMap<>();
         data.put("bike", bikeNumber);
-        MainActivity.ff.getHttpsCallable("rentBike").call(data).addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
-            @Override
-            public void onSuccess(HttpsCallableResult httpsCallableResult) {
-                if (httpsCallableResult.getData() instanceof Map) {
-                    Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
-                    MainActivity.currentBikeKey =  (String) dataObj.get("key");
-                    Rent.updateCurrentRent((String) dataObj.get ("rentId"));
-                    deviceInterface.sendMessage("rent:" + (String) dataObj.get("key"));
-                    pulsator.stop();
-                }
+        MainActivity.ff.getHttpsCallable("rentBike").call(data).addOnSuccessListener(httpsCallableResult -> {
+            if (httpsCallableResult.getData() instanceof Map) {
+                Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
+                MainActivity.currentBikeKey =  (String) dataObj.get("key");
+                Rent.updateCurrentRent((String) dataObj.get ("rentId"));
+                deviceInterface.sendMessage("rent:" + dataObj.get("key"));
+                pulsator.stop();
             }
         });
     }

@@ -9,12 +9,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.hmod_.bike.Activity.LoginActivity;
 import com.example.hmod_.bike.Activity.MainActivity;
 
 public class SplachActivity extends AppCompatActivity {
-    private int SPLASH_TIME = 1500;
-    private static int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 111;
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 111;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,16 +44,12 @@ public class SplachActivity extends AppCompatActivity {
     }
 
     private void hideSplach (){
-        new Handler().postDelayed(new Runnable() {
-
-
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                Intent i = new Intent(SplachActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
+        int SPLASH_TIME = 1500;
+        new Handler().postDelayed(() -> {
+            // This method will be executed once the timer is over
+            Intent i = new Intent(SplachActivity.this, MainActivity.class);
+            startActivity(i);
+            finish();
         }, SPLASH_TIME);
     }
 }

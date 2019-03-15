@@ -51,6 +51,5 @@ public class WhereVouchersActivity extends SupportMapFragment implements OnMapRe
 
         mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
         mMap.setMyLocationEnabled(true);
-        ;
     }
 }

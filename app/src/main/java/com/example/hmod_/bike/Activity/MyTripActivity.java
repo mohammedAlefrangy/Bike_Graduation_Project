@@ -3,7 +3,6 @@ package com.example.hmod_.bike.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +15,6 @@ import com.example.hmod_.bike.BluetoothControlUnit;
 import com.example.hmod_.bike.BluetoothListener;
 import com.example.hmod_.bike.R;
 import com.example.hmod_.bike.Rent;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.functions.HttpsCallableResult;
 import com.harrysoft.androidbluetoothserial.SimpleBluetoothDeviceInterface;
 
 import net.crosp.libs.android.circletimeview.CircleTimeView;
@@ -34,12 +30,16 @@ public class MyTripActivity extends Fragment implements BluetoothListener {
     //    Intent intentThatStartedThisActivity;
 
     @BindView(R.id.circle_timer_view)
+    private
     CircleTimeView circle_timer_view;
     @BindView(R.id.rentedBike)
+    private
     TextView rentedBike;
     @BindView(R.id.estimatedCharges)
+    private
     TextView estimatedCharges;
     @BindView(R.id.returnBike)
+    private
     Button returnBikeBtn;
     @BindView(R.id.parkBike)
     Button parkBikeBtn;
@@ -83,12 +83,7 @@ public class MyTripActivity extends Fragment implements BluetoothListener {
                 estimatedCharges.setText(String.format(estimatedChargesFormat , (time/3600.0) * 2));
             }
         });
-        returnBikeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                returnBike ();
-            }
-        });
+        returnBikeBtn.setOnClickListener(view -> returnBike ());
         MainActivity.mainActivity.getSupportActionBar().setTitle("My Trip");
         return rootView;
     }
@@ -113,22 +108,14 @@ public class MyTripActivity extends Fragment implements BluetoothListener {
             data.put("key", returnKey);
             data.put("rentid", MainActivity.currentRent.id);
             data.put("station", "nbqE62Fk1sk0ybcIllob");
-            MainActivity.ff.getHttpsCallable("returnBike").call(data).addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
-                @Override
-                public void onSuccess(HttpsCallableResult httpsCallableResult) {
-                    MainActivity.currentBikeKey =  null;
-                    Rent.updateCurrentRent(null);
-                    if (httpsCallableResult.getData() instanceof Map) {
-                        Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
-                        Toast.makeText(getActivity(), (String) dataObj.get("msg"), Toast.LENGTH_SHORT).show();
-                    }
+            MainActivity.ff.getHttpsCallable("returnBike").call(data).addOnSuccessListener(httpsCallableResult -> {
+                MainActivity.currentBikeKey =  null;
+                Rent.updateCurrentRent(null);
+                if (httpsCallableResult.getData() instanceof Map) {
+                    Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
+                    Toast.makeText(getActivity(), (String) dataObj.get("msg"), Toast.LENGTH_SHORT).show();
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+            }).addOnFailureListener(e -> Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show());
         }
     }
 

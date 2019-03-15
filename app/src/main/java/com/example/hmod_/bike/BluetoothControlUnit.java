@@ -1,24 +1,17 @@
 package com.example.hmod_.bike;
 
-import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.util.Log;
 
-import com.example.hmod_.bike.Activity.MainActivity;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.functions.HttpsCallableResult;
 import com.harrysoft.androidbluetoothserial.BluetoothManager;
 import com.harrysoft.androidbluetoothserial.BluetoothSerialDevice;
 import com.harrysoft.androidbluetoothserial.SimpleBluetoothDeviceInterface;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class BluetoothControlUnit {
-    private BluetoothManager bluetoothManager = BluetoothManager.getInstance();
+    private final BluetoothManager bluetoothManager = BluetoothManager.getInstance();
     private SimpleBluetoothDeviceInterface deviceInterface;
     private static BluetoothControlUnit instance;
     private BluetoothListener listener;

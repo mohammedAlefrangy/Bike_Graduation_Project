@@ -14,8 +14,8 @@ import com.example.hmod_.bike.Rent;
 import java.util.ArrayList;
 
 public class AdapterForListItem extends RecyclerView.Adapter<AdapterForListItem.MyViewHolder> {
-    private ArrayList<Rent> rents;
-    private Context context;
+    private final ArrayList<Rent> rents;
+    private final Context context;
     private final OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
@@ -54,9 +54,10 @@ public class AdapterForListItem extends RecyclerView.Adapter<AdapterForListItem.
     // you provide access to all the views for a data item in a view holder
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
-        TextView mtime, mdate_and_price;
+        final TextView mtime;
+        final TextView mdate_and_price;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             mtime = itemView.findViewById(R.id.time);
             mdate_and_price = itemView.findViewById(R.id.date_and_price);
