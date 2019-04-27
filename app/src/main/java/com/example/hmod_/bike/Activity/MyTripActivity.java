@@ -19,6 +19,7 @@ import com.harrysoft.androidbluetoothserial.SimpleBluetoothDeviceInterface;
 
 import net.crosp.libs.android.circletimeview.CircleTimeView;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,10 +38,12 @@ public class MyTripActivity extends Fragment implements BluetoothListener {
     TextView estimatedCharges;
     @BindView(R.id.returnBike)
     Button returnBikeBtn;
-    @BindView(R.id.parkBike)
-    Button parkBikeBtn;
+    @BindView(R.id.reopenBike)
+    Button reopenBikeBtn;
 
+    private BluetoothControlUnit bluetoothControlUnit;
 
+    private int pendingJob = 0; // 0 nothing, 1 return bike, 2 repoen bike
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,7 +56,8 @@ public class MyTripActivity extends Fragment implements BluetoothListener {
             // TODO: We should show some error
             return rootView;
         }
-        BluetoothControlUnit.getInstance().setListener(this);
+        bluetoothControlUnit = BluetoothControlUnit.getInstance();
+        bluetoothControlUnit.setListener(this);
 
         rentedBike.setText(getString(R.string.rented_bike_number) + " " + MainActivity.currentRent.getBikeNumber());
         Date now = new Date ();
@@ -75,24 +79,43 @@ public class MyTripActivity extends Fragment implements BluetoothListener {
 
             @Override
             public void onTimerTimeValueChanged(long time) {
-                Log.d("TIMER LISTENER", "onTimerTimeValueChanged " + time);
                 estimatedCharges.setText(String.format(estimatedChargesFormat , (time/3600.0) * 2));
             }
         });
         returnBikeBtn.setOnClickListener(view -> returnBike ());
+        reopenBikeBtn.setOnClickListener(view -> reopenBike ());
         MainActivity.mainActivity.getSupportActionBar().setTitle("My Trip");
         return rootView;
     }
 
     private void returnBike () {
         Log.d("sendmes", "retu:" + MainActivity.currentBikeKey);
-        SimpleBluetoothDeviceInterface deviceInterface = BluetoothControlUnit.getInstance().getDeviceInterface();
-        deviceInterface.sendMessage("retu:" + MainActivity.currentBikeKey);
+        if (bluetoothControlUnit.isConnected()) {
+            SimpleBluetoothDeviceInterface deviceInterface = bluetoothControlUnit.getDeviceInterface();
+            deviceInterface.sendMessage("retu:" + MainActivity.currentBikeKey);
+        } else {
+            pendingJob = 1;
+            bluetoothControlUnit.reconnectToLastDevice();
+        }
+    }
+
+    private void reopenBike () {
+        if (bluetoothControlUnit.isConnected()) {
+            SimpleBluetoothDeviceInterface deviceInterface = bluetoothControlUnit.getDeviceInterface();
+            deviceInterface.sendMessage("rent:" + MainActivity.currentBikeKey);
+        } else {
+            pendingJob = 2;
+            bluetoothControlUnit.reconnectToLastDevice();
+        }
     }
 
     @Override
     public void onConnected(SimpleBluetoothDeviceInterface deviceInterface) {
-
+        if (pendingJob == 1) {
+            returnBike ();
+        } else if (pendingJob == 2){
+            reopenBike ();
+        }
     }
 
     @Override
@@ -105,18 +128,25 @@ public class MyTripActivity extends Fragment implements BluetoothListener {
             data.put("rentid", MainActivity.currentRent.id);
             data.put("station", "nbqE62Fk1sk0ybcIllob");
             MainActivity.ff.getHttpsCallable("returnBike").call(data).addOnSuccessListener(httpsCallableResult -> {
-                MainActivity.currentBikeKey =  null;
+                MainActivity.setCurrentBikeKey (null);
                 Rent.updateCurrentRent(null);
                 if (httpsCallableResult.getData() instanceof Map) {
                     Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
                     Toast.makeText(getActivity(), (String) dataObj.get("msg"), Toast.LENGTH_SHORT).show();
                 }
             }).addOnFailureListener(e -> Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show());
+        } else if (message.startsWith("clos:")) {
+            Toast.makeText(getActivity(), "Please lock the bike to return it!", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onError(Throwable error) {
-
+        String errorMsg = "";
+        if (error instanceof IOException) {
+            if (error.getMessage().contains("timeout"))
+                errorMsg = "Couldn't connect to the bike.";
+        }
+        Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_SHORT).show();
     }
 }

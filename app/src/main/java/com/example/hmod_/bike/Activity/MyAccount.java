@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hmod_.bike.R;
+import com.example.hmod_.bike.SplachActivity;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.squareup.picasso.Picasso;
 
@@ -74,7 +75,7 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
                 if (httpsCallableResult.getData() instanceof Map) {
                     Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
                     if ((Boolean) dataObj.get("success")) {
-                        MainActivity.mainActivity.updateUser();
+                        SplachActivity.updateUser();
                     }
                 }
             }).addOnFailureListener(e -> Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show());

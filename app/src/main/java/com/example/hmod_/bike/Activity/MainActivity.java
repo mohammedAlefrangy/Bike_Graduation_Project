@@ -1,7 +1,9 @@
 package com.example.hmod_.bike.Activity;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -39,8 +42,6 @@ public class MainActivity extends AppCompatActivity
     ImageButton location;
     private NavigationView navigationView;
 
-    private static final int RC_SIGN_IN = 123;
-    private FirebaseAuth mAuth;
     public static FirebaseUser currentAuthUser;
 
     public static User currentUser;
@@ -49,10 +50,12 @@ public class MainActivity extends AppCompatActivity
     public static MainActivity mainActivity;
     public static Rent currentRent = null;
     public static String currentBikeKey = "";
+    public static SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mainActivity = this;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -71,60 +74,31 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.find_bike);
         changeFragment (R.id.find_bike);
-
-        //TODO: Move the firebase auth to splach activity
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        if (currentUser == null) {
-            createSignInIntent();
-        } else {
-            updateUser();
-        }
-
+        updateHeaderUI ();
+        updateMenuUI (true);
 
     }
 
-    private void createSignInIntent() {
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build(),
-                new AuthUI.IdpConfig.TwitterBuilder().build());
-
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setLogo(R.drawable.ic_bike_parking)
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
-    }
-
-
-    public void updateUser() {
-        currentAuthUser = mAuth.getCurrentUser();
-        db.collection("users").document(currentAuthUser.getUid()).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    currentUser = document.toObject(User.class);
-
-                } else {
-                    currentUser = new User(currentAuthUser);
-                    db.collection("users").document(currentAuthUser.getUid()).set(currentUser);
-                }
-                updateUI();
-            }
-        });
-    }
-
-    private void updateUI() {
+    public void updateHeaderUI() {
         TextView usernameTV = navigationView.getHeaderView(0).findViewById(R.id.userName);
         usernameTV.setText(currentUser.getName());
         TextView creditsTV = navigationView.getHeaderView(0).findViewById(R.id.credits);
         creditsTV.setText("Credits: " + currentUser.getCredits() + " NIS");
         if (MyAccount.instance != null) MyAccount.instance.updateUI();
+    }
+
+    private void updateMenuUI (boolean isInit) {
+        boolean inRent = currentRent != null;
+        Menu menu = navigationView.getMenu();
+        menu.getItem(1).setVisible(!inRent);
+        menu.getItem(2).setVisible(inRent);
+        if (menu.getItem(1).isChecked() || (isInit && inRent)) {
+            changeFragment(R.id.my_trip);
+            navigationView.setCheckedItem(R.id.my_trip);
+        } else if (menu.getItem(2).isChecked()) {
+            changeFragment(R.id.my_rents);
+            navigationView.setCheckedItem(R.id.my_rents);
+        }
     }
 
 
@@ -184,18 +158,16 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 
-    public void setCurrentRent (Rent rent) {
+    public static void setCurrentRent (Rent rent, boolean isInit) {
         MainActivity.currentRent = rent;
-        boolean inRent = currentRent != null;
-        Menu menu = navigationView.getMenu();
-        menu.getItem(1).setVisible(!inRent);
-        menu.getItem(2).setVisible(inRent);
-        if (menu.getItem(1).isChecked()) {
-            changeFragment(R.id.my_trip);
-            navigationView.setCheckedItem(R.id.my_trip);
-        } else if (menu.getItem(2).isChecked()) {
-            changeFragment(R.id.my_rents);
-            navigationView.setCheckedItem(R.id.my_rents);
-        }
+        if (MainActivity.mainActivity != null)
+            MainActivity.mainActivity.updateMenuUI (isInit);
+    }
+
+    public static void setCurrentBikeKey (String bikeKey) {
+        currentBikeKey = bikeKey;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("lastBikeKey", bikeKey);
+        editor.commit();
     }
 }

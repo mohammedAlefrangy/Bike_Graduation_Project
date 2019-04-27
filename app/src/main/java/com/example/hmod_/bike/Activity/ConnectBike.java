@@ -133,7 +133,7 @@ public class ConnectBike extends Fragment implements BluetoothListener {
             BluetoothDevice blDevice = blDevices.get("Bike-" + bikeNumber);
             Log.d(TAG, "Connect to :" + blDevice.getName());
             BluetoothControlUnit.getInstance().setListener(this);
-            BluetoothControlUnit.getInstance().connectToDevice(blDevice);
+            BluetoothControlUnit.getInstance().connectToDevice(blDevice.getAddress());
 
         }
         // TODO: If we didn't find a bike
@@ -187,7 +187,7 @@ public class ConnectBike extends Fragment implements BluetoothListener {
         MainActivity.ff.getHttpsCallable("rentBike").call(data).addOnSuccessListener(httpsCallableResult -> {
             if (httpsCallableResult.getData() instanceof Map) {
                 Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
-                MainActivity.currentBikeKey =  (String) dataObj.get("key");
+                MainActivity.setCurrentBikeKey ((String) dataObj.get("key"));
                 Rent.updateCurrentRent((String) dataObj.get ("rentId"));
                 deviceInterface.sendMessage("rent:" + dataObj.get("key"));
                 pulsator.stop();

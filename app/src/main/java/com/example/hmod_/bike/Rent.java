@@ -1,6 +1,8 @@
 package com.example.hmod_.bike;
 
 
+import android.content.SharedPreferences;
+
 import com.example.hmod_.bike.Activity.MainActivity;
 
 import java.text.SimpleDateFormat;
@@ -83,12 +85,20 @@ public class Rent {
     }
 
     public static void updateCurrentRent (String id) {
+        updateCurrentRent(id, false);
+    }
+    public static void updateCurrentRent (String id, boolean isInit) {
+        if (!isInit) {
+            SharedPreferences.Editor editor = MainActivity.prefs.edit();
+            editor.putString("lastRentId", id);
+            editor.commit();
+        }
         if (id == null) {
-            MainActivity.mainActivity.setCurrentRent(null);
+            MainActivity.mainActivity.setCurrentRent(null, false);
             return;
         }
         MainActivity.db.collection("rents").document(id).get().addOnSuccessListener(documentSnapshot -> {
-            MainActivity.mainActivity.setCurrentRent(documentSnapshot.toObject(Rent.class));
+            MainActivity.mainActivity.setCurrentRent(documentSnapshot.toObject(Rent.class), isInit);
             MainActivity.currentRent.id = id;
         });
     }
