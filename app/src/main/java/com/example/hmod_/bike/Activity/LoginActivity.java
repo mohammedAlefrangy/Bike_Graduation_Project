@@ -21,16 +21,12 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_SIGNUP = 0;
 
     @BindView(R.id.input_email)
-    private
     EditText emailText;
     @BindView(R.id.input_password)
-    private
     EditText passwordText;
     @BindView(R.id.btn_login)
-    private
     Button loginButton;
     @BindView(R.id.link_signup)
-    private
     TextView signupLink;
 
     @Override

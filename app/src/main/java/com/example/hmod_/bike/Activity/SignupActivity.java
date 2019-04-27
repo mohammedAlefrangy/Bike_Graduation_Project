@@ -22,22 +22,16 @@ public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
     @BindView(R.id.input_name)
-    private
     EditText nameText;
     @BindView(R.id.input_email)
-    private
     EditText emailText;
     @BindView(R.id.input_password)
-    private
     EditText passwordText;
     @BindView(R.id.reinput_password)
-    private
     EditText re_password;
     @BindView(R.id.btn_signup)
-    private
     Button signupButton;
     @BindView(R.id.link_login)
-    private
     TextView loginLink;
 
 

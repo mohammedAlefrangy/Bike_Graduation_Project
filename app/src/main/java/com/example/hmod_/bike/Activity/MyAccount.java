@@ -35,19 +35,14 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
 
     private BarcodeReader barcodeReader;
     @BindView(R.id.codeET)
-    private
     EditText codeET;
     @BindView(R.id.add)
-    private
     Button addBtn;
     @BindView(R.id.credits)
-    private
     TextView creditsTV;
     @BindView(R.id.userName)
-    private
     TextView userNameTV;
     @BindView(R.id.circleImageView)
-    private
     ImageView circleIV;
     public static MyAccount instance;
 

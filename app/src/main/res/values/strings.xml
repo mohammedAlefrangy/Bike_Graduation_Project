@@ -52,7 +52,7 @@
     <string name="stop_timr">Stop Timr</string>
     <string name="estimated_charges">Estimated charges: %.2f NIS</string>
     <string name="connected">Connected</string>
-    <string name="park_the_bike">Park the bike</string>
-    <string name="return_the_bike">return the bike</string>
+    <string name="park_the_bike">Reopen the bike</string>
+    <string name="return_the_bike">Return the bike</string>
     <string name="rented_bike_number">Rented Bike Number:</string>
 </resources>

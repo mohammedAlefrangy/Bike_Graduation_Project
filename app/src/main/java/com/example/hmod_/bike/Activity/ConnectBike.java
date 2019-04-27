@@ -45,10 +45,8 @@ public class ConnectBike extends Fragment implements BluetoothListener {
 //    Intent intentThatStartedThisActivity;
 
     @BindView(R.id.rent_now)
-    private
     Button rent_now;
     @BindView(R.id.spinner)
-    private
     Spinner spinner;
     private PulsatorLayout pulsator;
 

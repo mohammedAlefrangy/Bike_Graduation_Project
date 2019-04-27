@@ -31,10 +31,8 @@ public class MyRentActivity extends Fragment implements AdapterForListItem.OnIte
     private final ArrayList<Rent> rents = new ArrayList<>();
 
     @BindView(R.id.recyclerView)
-    private
     RecyclerView recyclerView;
     @BindView(R.id.progress_bar)
-    private
     ProgressBar progressBar;
 
     @Override

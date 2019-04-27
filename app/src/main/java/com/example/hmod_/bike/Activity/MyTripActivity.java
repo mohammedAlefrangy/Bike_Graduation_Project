@@ -30,16 +30,12 @@ public class MyTripActivity extends Fragment implements BluetoothListener {
     //    Intent intentThatStartedThisActivity;
 
     @BindView(R.id.circle_timer_view)
-    private
     CircleTimeView circle_timer_view;
     @BindView(R.id.rentedBike)
-    private
     TextView rentedBike;
     @BindView(R.id.estimatedCharges)
-    private
     TextView estimatedCharges;
     @BindView(R.id.returnBike)
-    private
     Button returnBikeBtn;
     @BindView(R.id.parkBike)
     Button parkBikeBtn;
