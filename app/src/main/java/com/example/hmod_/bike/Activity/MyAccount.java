@@ -75,6 +75,8 @@ public class MyAccount extends Fragment implements BarcodeReader.BarcodeReaderLi
                 if (httpsCallableResult.getData() instanceof Map) {
                     Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
                     if ((Boolean) dataObj.get("success")) {
+                        codeET.setText("");
+                        Toast.makeText(getActivity(), "Thanks you ;) Voucher added successfully.", Toast.LENGTH_SHORT).show();
                         SplachActivity.updateUser();
                     }
                 }
