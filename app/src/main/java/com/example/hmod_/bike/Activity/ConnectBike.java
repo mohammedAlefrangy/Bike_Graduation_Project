@@ -115,7 +115,7 @@ public class ConnectBike extends Fragment implements BluetoothListener {
                 // Getting device information from the intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 Log.i(TAG, "Device found: " + device.getName() + "; MAC " + device.getAddress());
-                if (device.getName().startsWith("Bike-")) {
+                if (device.getName() != null && device.getName().startsWith("Bike-")) {
                     if (blDevices.get(device.getName()) == null) {
                         spinner.setEnabled(true);
                         blDevices.put(device.getName(), device);

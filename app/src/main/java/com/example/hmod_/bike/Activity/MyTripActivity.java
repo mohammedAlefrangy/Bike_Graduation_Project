@@ -18,6 +18,7 @@ import com.example.hmod_.bike.BluetoothControlUnit;
 import com.example.hmod_.bike.BluetoothListener;
 import com.example.hmod_.bike.R;
 import com.example.hmod_.bike.Rent;
+import com.example.hmod_.bike.SplachActivity;
 import com.harrysoft.androidbluetoothserial.SimpleBluetoothDeviceInterface;
 
 import net.crosp.libs.android.circletimeview.CircleTimeView;
@@ -146,6 +147,7 @@ public class MyTripActivity extends Fragment implements BluetoothListener {
                 if (httpsCallableResult.getData() instanceof Map) {
                     Map<String, Object> dataObj = (Map<String, Object>) httpsCallableResult.getData();
                     Toast.makeText(getActivity(), (String) dataObj.get("msg"), Toast.LENGTH_SHORT).show();
+                    SplachActivity.updateUser();
                 }
             }).addOnFailureListener(e -> Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show());
         } else if (message.startsWith("clos:")) {

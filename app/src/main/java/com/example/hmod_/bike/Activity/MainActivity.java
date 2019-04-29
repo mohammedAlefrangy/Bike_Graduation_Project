@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         TextView usernameTV = navigationView.getHeaderView(0).findViewById(R.id.userName);
         usernameTV.setText(currentUser.getName());
         TextView creditsTV = navigationView.getHeaderView(0).findViewById(R.id.credits);
-        creditsTV.setText("Credits: " + currentUser.getCredits() + " NIS");
+        creditsTV.setText(String.format("Credits: %.2f NIS", MainActivity.currentUser.getCredits()));
         if (MyAccount.instance != null) MyAccount.instance.updateUI();
     }
 
