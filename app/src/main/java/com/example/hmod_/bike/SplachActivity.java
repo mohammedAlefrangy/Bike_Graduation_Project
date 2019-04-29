@@ -97,6 +97,11 @@ public class SplachActivity extends AppCompatActivity {
                 RC_SIGN_IN);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        updateUser ();
+    }
+
     public static void updateUser () {
         updateUser(false);
     }

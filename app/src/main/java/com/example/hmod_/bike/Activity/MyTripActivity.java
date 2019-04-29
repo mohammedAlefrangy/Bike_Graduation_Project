@@ -1,5 +1,8 @@
 package com.example.hmod_.bike.Activity;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -88,14 +91,24 @@ public class MyTripActivity extends Fragment implements BluetoothListener {
         return rootView;
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
     private void returnBike () {
-        Log.d("sendmes", "retu:" + MainActivity.currentBikeKey);
-        if (bluetoothControlUnit.isConnected()) {
-            SimpleBluetoothDeviceInterface deviceInterface = bluetoothControlUnit.getDeviceInterface();
-            deviceInterface.sendMessage("retu:" + MainActivity.currentBikeKey);
+        if (isNetworkAvailable () ) {
+            if (bluetoothControlUnit.isConnected()) {
+                SimpleBluetoothDeviceInterface deviceInterface = bluetoothControlUnit.getDeviceInterface();
+                deviceInterface.sendMessage("retu:" + MainActivity.currentBikeKey);
+            } else {
+                pendingJob = 1;
+                bluetoothControlUnit.reconnectToLastDevice();
+            }
         } else {
-            pendingJob = 1;
-            bluetoothControlUnit.reconnectToLastDevice();
+            Toast.makeText(getActivity(), "Please connect to the internet.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -136,7 +149,7 @@ public class MyTripActivity extends Fragment implements BluetoothListener {
                 }
             }).addOnFailureListener(e -> Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show());
         } else if (message.startsWith("clos:")) {
-            Toast.makeText(getActivity(), "Please lock the bike to return it!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please lock the bike to return it.", Toast.LENGTH_SHORT).show();
         }
     }
 

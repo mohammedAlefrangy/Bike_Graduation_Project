@@ -55,4 +55,5 @@
     <string name="park_the_bike">Reopen the bike</string>
     <string name="return_the_bike">Return the bike</string>
     <string name="rented_bike_number">Rented Bike Number:</string>
+    <string name="app_name">SmartBikes</string>
 </resources>

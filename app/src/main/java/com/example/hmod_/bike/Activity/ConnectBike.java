@@ -192,7 +192,7 @@ public class ConnectBike extends Fragment implements BluetoothListener {
                 deviceInterface.sendMessage("rent:" + dataObj.get("key"));
                 pulsator.stop();
             }
-        });
+        }).addOnFailureListener(e -> Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show());;
     }
 
     @Override
