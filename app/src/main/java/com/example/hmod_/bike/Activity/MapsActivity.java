@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -94,7 +95,7 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
         });
 
 
-        if (ContextCompat.checkSelfPermission(getContext(),
+        if (ActivityCompat.checkSelfPermission(getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
             LocationManager locationManager = (LocationManager)
